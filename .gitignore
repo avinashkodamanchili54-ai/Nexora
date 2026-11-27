@@ -21,7 +21,6 @@ source/
 sources/
 processed/
 *.h5
-*.keras
 *.tflite
 *.db
 .DS_Store
