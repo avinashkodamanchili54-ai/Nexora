@@ -97,7 +97,7 @@ class MLService:
             except Exception:
                 pass
         items = []
-        for key, default_count in [("rice", 3), ("plantdoc", 28), ("plantvillage", 38)]:
+        for key, default_count in [("plantvillage", 38), ("paddy_doctor", 10), ("rice", 3)]:
             classes = self.class_mapping.get(key, [])
             metrics = self.eval_summary.get(key, {})
             file_exists = (MODELS_DIR / f"{key}_model.keras").exists()

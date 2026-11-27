@@ -94,19 +94,14 @@ export const DISTRICT_PRESETS = [
 
 export const CROP_MODES = [
   {
+    code: "general",
+    label: "All Crops — Primary AI (97.39% Acc)",
+    subtitle: "38 classes (PlantVillage Model — #1 Priority)",
+  },
+  {
     code: "paddy",
     label: "Paddy / Rice Specialist",
-    subtitle: "3 paddy diseases (Rice UCI Model)",
-  },
-  {
-    code: "general",
-    label: "General Crops (14+ Crops)",
-    subtitle: "38 classes (PlantVillage Model)",
-  },
-  {
-    code: "field",
-    label: "Field / Real-World Photos",
-    subtitle: "28 classes (PlantDoc Model)",
+    subtitle: "Paddy Doctor / Rice UCI Model (#2 Priority)",
   },
 ];
 

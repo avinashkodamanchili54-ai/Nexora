@@ -55,7 +55,7 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
   const [scanLanguage, setScanLanguage] = useState("te");
-  const [cropMode, setCropMode] = useState("paddy");
+  const [cropMode, setCropMode] = useState("general");
 
   const [farmProfile, setFarmProfile] = useState(() => {
     try {
