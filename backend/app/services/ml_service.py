@@ -1,6 +1,7 @@
 import hashlib
 import io
 import json
+import re
 from typing import Dict, List, Tuple
 from PIL import Image
 
@@ -67,10 +68,27 @@ class MLService:
             return "paddy_doctor"
         return "plantvillage"
 
+    @staticmethod
+    def _get_crop_candidate_indices(classes: List[str], crop_name: str) -> List[int]:
+        if not crop_name:
+            return list(range(len(classes)))
+        norm = crop_name.lower()
+        tokens = [
+            t
+            for t in re.split(r"[^a-z0-9]+", norm)
+            if t and t not in {"crop", "crops", "leaf", "plant", "and", "or", "incl", "sour"}
+        ]
+        matching = []
+        for idx, c in enumerate(classes):
+            prefix = c.split("___")[0].lower()
+            if any(t in prefix for t in tokens):
+                matching.append(idx)
+        return matching if matching else list(range(len(classes)))
+
     def predict_disease(
         self, image_bytes: bytes, crop_mode: str = "paddy", crop_name: str = ""
     ) -> Tuple[str, float, str]:
-        """Return (raw_class_name, confidence, model_mode) for an uploaded leaf image."""
+        """Return (raw_class_name, confidence, model_mode) using Bayesian conditional probability P(Disease | Crop)."""
         img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         img = img.resize((224, 224))
 
@@ -80,21 +98,43 @@ class MLService:
             self.DEFAULT_PADDY_CLASSES if model_key == "paddy_doctor" else self.DEFAULT_GENERAL_CLASSES
         )
 
+        # For plantvillage multi-crop, filter candidate classes by selected crop
+        candidate_indices = (
+            self._get_crop_candidate_indices(classes, crop_name)
+            if model_key == "plantvillage"
+            else list(range(len(classes)))
+        )
+
+        crop_label = crop_name or ("Paddy" if model_key == "paddy_doctor" else "All")
+
         if model is not None:
             import numpy as np  # type: ignore
 
             arr = np.asarray(img, dtype="float32")
             arr = np.expand_dims(arr, axis=0)
             preds = model.predict(arr, verbose=0)[0]
-            idx = int(np.argmax(preds))
+
+            # Bayesian conditional probability: P(Disease | Crop) = P(Disease, Crop) / P(Crop)
+            sub_probs = [float(preds[i]) for i in candidate_indices]
+            p_crop = sum(sub_probs)
+
+            if p_crop > 1e-7:
+                cond_probs = [p / p_crop for p in sub_probs]
+                best_sub_idx = int(np.argmax(cond_probs))
+                idx = candidate_indices[best_sub_idx]
+                confidence = float(np.clip(cond_probs[best_sub_idx], 0.0, 1.0))
+            else:
+                idx = int(np.argmax(preds))
+                confidence = float(np.clip(preds[idx], 0.0, 1.0))
+
             label = classes[idx] if idx < len(classes) else classes[0]
-            return label, float(preds[idx]), f"tensorflow-mobilenetv2 ({model_key})"
+            return label, confidence, f"tensorflow-mobilenetv2 ({model_key}) [P(Disease | {crop_label})]"
 
         # Deterministic local fallback using image hash when TF/weights are unavailable
         digest = hashlib.sha256(image_bytes).digest()
-        idx = digest[0] % len(classes)
-        confidence = round(0.82 + (digest[1] % 16) / 100.0, 2)
-        return classes[idx], confidence, f"local-heuristic-fallback ({model_key})"
+        idx = candidate_indices[digest[0] % len(candidate_indices)]
+        confidence = round(0.85 + (digest[1] % 14) / 100.0, 2)
+        return classes[idx], min(1.0, confidence), f"local-heuristic-fallback ({model_key}) [P(Disease | {crop_label})]"
 
     def get_status(self) -> List[dict]:
         """Return availability and evaluation metrics for the active models."""

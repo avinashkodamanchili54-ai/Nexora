@@ -173,7 +173,9 @@ export default function RegisterPage({ onNavigate }) {
                 onChange={handleChange}
               >
                 {CROP_PRESETS.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
+                  <option key={c.value} value={c.value}>
+                    {c.icon || "🌱"} {c.label} ({c.mode === "paddy" ? "Paddy Model" : "PlantVillage Multi-Crop"})
+                  </option>
                 ))}
               </select>
             </div>

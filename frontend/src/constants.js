@@ -78,11 +78,21 @@ export const UI_STRINGS = {
 };
 
 export const CROP_PRESETS = [
-  { value: "Paddy (Rice)", label: "Paddy (Rice)", badge: "RI", mode: "paddy" },
-  { value: "Tomato", label: "Tomato", badge: "TM", mode: "general" },
-  { value: "Potato", label: "Potato", badge: "PT", mode: "general" },
-  { value: "Pepper", label: "Chilli / Pepper", badge: "CH", mode: "general" },
-  { value: "Maize / Corn", label: "Maize / Corn", badge: "MZ", mode: "general" },
+  { value: "Paddy (Rice)", label: "Paddy (Rice)", badge: "RI", mode: "paddy", icon: "🌾" },
+  { value: "Tomato", label: "Tomato", badge: "TM", mode: "general", icon: "🍅" },
+  { value: "Potato", label: "Potato", badge: "PT", mode: "general", icon: "🥔" },
+  { value: "Corn (Maize)", label: "Corn / Maize", badge: "MZ", mode: "general", icon: "🌽" },
+  { value: "Pepper", label: "Chilli / Bell Pepper", badge: "CH", mode: "general", icon: "🫑" },
+  { value: "Apple", label: "Apple", badge: "AP", mode: "general", icon: "🍎" },
+  { value: "Grape", label: "Grape", badge: "GR", mode: "general", icon: "🍇" },
+  { value: "Orange", label: "Orange (Citrus)", badge: "OR", mode: "general", icon: "🍊" },
+  { value: "Peach", label: "Peach", badge: "PE", mode: "general", icon: "🍑" },
+  { value: "Strawberry", label: "Strawberry", badge: "SB", mode: "general", icon: "🍓" },
+  { value: "Cherry", label: "Cherry (incl. Sour)", badge: "CR", mode: "general", icon: "🍒" },
+  { value: "Blueberry", label: "Blueberry", badge: "BB", mode: "general", icon: "🫐" },
+  { value: "Soybean", label: "Soybean", badge: "SY", mode: "general", icon: "🌱" },
+  { value: "Squash", label: "Squash", badge: "SQ", mode: "general", icon: "🎃" },
+  { value: "Raspberry", label: "Raspberry", badge: "RB", mode: "general", icon: "🍇" },
 ];
 
 export const DISTRICT_PRESETS = [

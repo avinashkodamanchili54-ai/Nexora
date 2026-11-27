@@ -152,9 +152,27 @@ export default function ProfilePage({ onNavigate }) {
             <div className="form-group">
               <label htmlFor="p-crop">{t("auth.cropType")}</label>
               <select id="p-crop" name="crop_type" value={form.crop_type} onChange={handleChange}>
-                {CROP_PRESETS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+                {CROP_PRESETS.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.icon || "🌱"} {c.label} ({c.mode === "paddy" ? "Paddy Model" : "PlantVillage Multi-Crop"})
+                  </option>
+                ))}
               </select>
             </div>
+          </div>
+          <div style={{
+            marginTop: "12px",
+            padding: "8px 12px",
+            borderRadius: "8px",
+            background: form.crop_mode === "paddy" ? "#f0fdf4" : "#eff6ff",
+            border: `1px solid ${form.crop_mode === "paddy" ? "#86efac" : "#bfdbfe"}`,
+            fontSize: "0.8125rem",
+            color: form.crop_mode === "paddy" ? "#166534" : "#1e40af"
+          }}>
+            <strong>🧠 Conditional Probability Diagnosis:</strong>{" "}
+            {form.crop_mode === "paddy"
+              ? "Paddy Doctor Specialist engages 10 rice conditions with P(Disease | Paddy)."
+              : `PlantVillage 38-class AI evaluates P(Disease | ${form.crop_type}) specifically across ${form.crop_type} diseases.`}
           </div>
         </section>
 
