@@ -36,6 +36,7 @@ class MLService:
                 self.eval_summary = {}
 
         model_files = {
+            "paddy_doctor": MODELS_DIR / "paddy_doctor_model.keras",
             "rice": MODELS_DIR / "rice_model.keras",
             "plantdoc": MODELS_DIR / "plantdoc_model.keras",
             "plantvillage": MODELS_DIR / "plantvillage_model.keras",
@@ -52,7 +53,11 @@ class MLService:
                 pass
 
     def _resolve_model_key(self, crop_mode: str) -> str:
-        return {"paddy": "rice", "field": "plantdoc", "general": "plantvillage"}.get(
+        if crop_mode == "paddy":
+            if "paddy_doctor" in self.models or (MODELS_DIR / "paddy_doctor_model.keras").exists():
+                return "paddy_doctor"
+            return "rice"
+        return {"field": "plantdoc", "general": "plantvillage"}.get(
             crop_mode, "plantvillage"
         )
 

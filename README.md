@@ -292,7 +292,7 @@ Rather than blindly merging incompatible taxonomies, we train **three separate s
 | :--- | :--- | :---: | :---: | :--- | :---: | :---: |
 | `rice` | Rice Leaf Diseases (UCI) | 120 | 3 | 70% / 15% / 15% | **72.22%** | **0.7167** |
 | `plantdoc` | PlantDoc (Field Photos) | 2,573 | 28 | Official `test/`, 85/15 `train/val` | **43.22%** | **0.3978** |
-| `plantvillage` | PlantVillage (Color) | 54,305 | 38 | 70% / 15% / 15% | *Training in progress* (Epoch 7 train acc: `96.30%`, Epoch 6 val acc: `94.48%`) | *Pending final eval* |
+| `plantvillage` | PlantVillage (Color) | 54,305 | 38 | 70% / 15% / 15% | **97.39%** | **0.9665** |
 
 *Note on PlantDoc & UCI Rice:* PlantDoc contains noisy real-world backgrounds across 28 classes, while UCI Rice has only 40 images per class (18 test images total)—reporting these scores transparently avoids overstated lab-only metrics.
 
