@@ -77,3 +77,4 @@ export default function HomeDashboard({ onNavigate, onOpenAlerts }) {
     </div>
   );
 }
+

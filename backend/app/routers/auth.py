@@ -130,3 +130,4 @@ def update_profile(req: UpdateProfileRequest, current_user: dict = Depends(_get_
     if not updated:
         raise HTTPException(status_code=404, detail="User not found")
     return _safe_user(updated)
+

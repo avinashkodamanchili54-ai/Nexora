@@ -144,3 +144,4 @@ def get_alerts(
         a.setdefault("read", False)
 
     return {"alerts": alerts, "count": len(alerts)}
+
