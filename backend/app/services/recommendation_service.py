@@ -1,8 +1,24 @@
+import json
 import re
-from typing import List, Optional
-from app.data.disease_db import DISEASE_DB
+from pathlib import Path
+from typing import Dict, List, Optional
 from app.models.schemas import DiseaseGuidance, RegionalResource
 from app.services.llm_service import llm_service
+
+_RECOMMENDATIONS_PATH = Path(__file__).resolve().parent.parent / "data" / "disease_recommendations.json"
+
+
+def _load_recommendations() -> Dict[str, dict]:
+    if _RECOMMENDATIONS_PATH.exists():
+        try:
+            return json.loads(_RECOMMENDATIONS_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    from app.data.disease_db import DISEASE_DB
+    return DISEASE_DB
+
+
+DISEASE_DB: Dict[str, dict] = _load_recommendations()
 
 
 def _normalize_id(raw_label: str) -> str:

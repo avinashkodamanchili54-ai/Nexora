@@ -101,7 +101,7 @@ export const CROP_MODES = [
   {
     code: "paddy",
     label: "Paddy / Rice Specialist",
-    subtitle: "Paddy Doctor / Rice UCI Model (#2 Priority)",
+    subtitle: "10 classes (Paddy Doctor Model — #2 Priority)",
   },
 ];
 

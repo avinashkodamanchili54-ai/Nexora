@@ -20,6 +20,13 @@ LOW_CONFIDENCE_THRESHOLD = 0.60
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-lite-latest").strip()
 
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://zriefibnkahrxkfnexwz.supabase.co").strip()
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "sb_publishable_sDXJr6s0ztJEqE-J-bga9g_slvkFqzv").strip()
+SUPABASE_DB_URL = os.getenv(
+    "SUPABASE_DB_URL",
+    "postgresql://postgres.zriefibnkahrxkfnexwz:Avinash7954@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres?sslmode=require",
+).strip()
+
 SUPPORTED_LANGUAGES = {
     "en": "English",
     "te": "Telugu",

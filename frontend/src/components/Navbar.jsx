@@ -1,4 +1,8 @@
-import { LANGUAGES, TABS, UI_STRINGS } from "../constants";
+import { useTranslation } from "react-i18next";
+import { LANGUAGES, TABS } from "../constants";
+import { useAuth } from "../context/AuthContext";
+import { useAlerts } from "../context/AlertsContext";
+import i18n from "../i18n";
 
 const STEP_ICONS = {
   home: (
@@ -9,14 +13,12 @@ const STEP_ICONS = {
   ),
   farm: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1">
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-      <circle cx="12" cy="10" r="3" />
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
     </svg>
   ),
   radar: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 3v9l6 3" />
+      <circle cx="12" cy="12" r="9" /><path d="M12 3v9l6 3" />
     </svg>
   ),
   scanner: (
@@ -27,8 +29,7 @@ const STEP_ICONS = {
   ),
   rootcause: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1">
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
+      <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
     </svg>
   ),
   assistant: (
@@ -38,25 +39,19 @@ const STEP_ICONS = {
   ),
   history: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1">
-      <path d="M3 3v5h5" />
-      <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8" />
-      <path d="M12 7v5l4 2" />
+      <path d="M3 3v5h5" /><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8" /><path d="M12 7v5l4 2" />
     </svg>
   ),
 };
 
-const SHORT_LANG = { en: "EN", te: "తెలుగు", hi: "हिन्दी", ta: "தமிழ்", kn: "ಕನ್ನಡ" };
+const SHORT_LANG = { en: "EN", te: "తె", hi: "हि", ta: "த", kn: "ಕ" };
 
-export default function Navbar({
-  activeTab,
-  onSelectTab,
-  models,
-  uiLanguage,
-  onUiLanguageChange,
-  farmProfile,
-}) {
+export default function Navbar({ activeTab, onSelectTab, models, onOpenAlerts, onOpenProfile }) {
+  const { t } = useTranslation();
+  const { user } = useAuth();
+  const { unreadCount } = useAlerts();
   const readyCount = models.filter((m) => m.loaded).length;
-  const strings = UI_STRINGS.en;
+  const initials = (user?.name || "F").slice(0, 2).toUpperCase();
 
   return (
     <header className="hero-header">
@@ -64,8 +59,7 @@ export default function Navbar({
         <div className="brand-block">
           <div className="brand-emblem" aria-hidden="true">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-              <path d="M12 22V10" />
-              <path d="M12 14C12 8.5 16.5 4 21 4c0 4.5-4.5 10-9 10Z" />
+              <path d="M12 22V10" /><path d="M12 14C12 8.5 16.5 4 21 4c0 4.5-4.5 10-9 10Z" />
               <path d="M12 11C12 6.5 8 3 3 3c0 4.5 4 8 9 8Z" />
             </svg>
           </div>
@@ -74,45 +68,56 @@ export default function Navbar({
               <h1>KRISHI SAKHI AI</h1>
               <span className="hero-chip">Predictive Crop Health · RootCause AI</span>
             </div>
-            <p className="hero-tagline">{strings.tagline}</p>
+            <p className="hero-tagline">{t("tagline")}</p>
           </div>
         </div>
 
         <div className="header-controls">
           <div className="glass-pill" title="AI Engine Status">
             <span className={`dot ${readyCount > 0 ? "dot-live" : "dot-warn"}`} />
-            <span>
-              {readyCount}/3 Models · {farmProfile.crop}
-            </span>
+            <span>{readyCount}/2 Models · {user?.crop_type || "Paddy"}</span>
           </div>
 
-          <div className="lang-pill-group" role="group" aria-label="Quick Language Switch">
+          {/* Language selector */}
+          <div className="lang-pill-group" role="group" aria-label="Language Switch">
             {LANGUAGES.map((l) => (
-              <button
-                key={l.code}
-                type="button"
-                className={`lang-pill-btn ${uiLanguage === l.code ? "active" : ""}`}
-                onClick={() => onUiLanguageChange(l.code)}
+              <button key={l.code} type="button"
+                className={`lang-pill-btn ${i18n.language === l.code ? "active" : ""}`}
+                onClick={() => { i18n.changeLanguage(l.code); localStorage.setItem("nexora_lang", l.code); }}
                 title={l.label}
               >
                 {SHORT_LANG[l.code]}
               </button>
             ))}
           </div>
+
+          {/* Alerts bell */}
+          <button type="button" className="icon-btn icon-btn-nav" onClick={onOpenAlerts}
+            aria-label={`${unreadCount} alerts`} title={t("nav.alerts")}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+            {unreadCount > 0 && <span className="bell-badge">{unreadCount > 9 ? "9+" : unreadCount}</span>}
+          </button>
+
+          {/* Profile avatar */}
+          <button type="button" className="avatar-btn" onClick={onOpenProfile}
+            aria-label={t("nav.profile")} title={t("nav.profile")}>
+            {initials}
+          </button>
         </div>
       </div>
 
       <nav className="stepper-nav" aria-label="Farmer Journey Pages">
         {TABS.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
+          <button key={tab.id} type="button"
             className={`step-pill ${activeTab === tab.id ? "active" : ""}`}
             aria-current={activeTab === tab.id ? "page" : undefined}
             onClick={() => onSelectTab(tab.id)}
           >
             {STEP_ICONS[tab.id]}
-            <span>{strings.tabs[tab.id]}</span>
+            <span>{t(`tabs.${tab.id}`)}</span>
           </button>
         ))}
       </nav>

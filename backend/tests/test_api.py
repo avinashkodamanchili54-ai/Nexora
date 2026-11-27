@@ -73,7 +73,7 @@ def test_health_and_models_status():
 
     m = client.get("/api/models/status")
     assert m.status_code == 200
-    assert {item["key"] for item in m.json()["models"]} == {"rice", "plantdoc", "plantvillage"}
+    assert {item["key"] for item in m.json()["models"]} == {"plantvillage", "paddy_doctor"}
 
 
 def test_weather_spray_windows_and_validation():
@@ -222,3 +222,42 @@ def test_farmer_and_history_lifecycle():
     fid = reg.json()["farmer_id"]
     assert client.get(f"/api/farmers/{fid}").status_code == 200
     assert client.get("/api/farmers/nonexistent-id").status_code == 404
+
+
+def test_supabase_auth_flow():
+    # Login with existing sample user
+    res = client.post(
+        "/api/auth/login",
+        json={"phone": "9876543210", "password": "password123"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert "token" in data
+    assert data["user"]["phone"] == "9876543210"
+    assert data["user"]["name"] == "Ramesh Naidu"
+    token = data["token"]
+
+    # Verify /me endpoint
+    me_res = client.get(
+        "/api/auth/me",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert me_res.status_code == 200
+    assert me_res.json()["phone"] == "9876543210"
+
+    # Update profile
+    up_res = client.put(
+        "/api/auth/update-profile",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"name": "Ramesh Naidu Updated", "preferred_language": "te"},
+    )
+    assert up_res.status_code == 200
+    assert up_res.json()["name"] == "Ramesh Naidu Updated"
+
+
+def test_alerts_endpoint():
+    res = client.get("/api/alerts?crop=Paddy (Rice)&growth_stage=Tillering")
+    assert res.status_code == 200
+    data = res.json()
+    assert "alerts" in data
+    assert "count" in data

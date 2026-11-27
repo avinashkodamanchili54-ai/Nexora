@@ -1,0 +1,1349 @@
+{
+  "bacterial_leaf_blight": {
+    "disease_id": "bacterial_leaf_blight",
+    "name": "Bacterial Leaf Blight",
+    "crop": "Paddy (Rice)",
+    "severity": "High",
+    "symptoms": [
+      "Water-soaked yellowish stripes on leaf margins",
+      "Leaves turn yellow-white and dry up from the tip downward",
+      "Milky or opaque bacterial ooze on young lesions in the morning"
+    ],
+    "causes": [
+      "Bacterium Xanthomonas oryzae pv. oryzae",
+      "High humidity, heavy rain, and strong winds",
+      "Excessive nitrogen fertilizer application"
+    ],
+    "organic_controls": [
+      "Drain standing water from the field for 3-4 days to halt bacterial spread",
+      "Spray fresh cow dung slurry (20 g/L filtered) or Pseudomonas fluorescens @ 10 g/L as preventive bio-control"
+    ],
+    "treatments": [
+      "Apply copper-based bactericide ONLY if spread >10%: Copper oxychloride 50% WP @ 2.5 g/L + Streptocycline @ 0.1 g/L",
+      "Avoid spraying during strong winds or rain"
+    ],
+    "do_not_do": [
+      "Do NOT apply extra urea/nitrogen fertilizer—it accelerates bacterial blight",
+      "Do NOT use fungal sprays or unverified cocktail mixtures from local shops; fungicides do not kill bacteria"
+    ],
+    "preventions": [
+      "Use resistant paddy varieties (e.g., Improved Samba Mahsuri)",
+      "Apply balanced nitrogen fertilizer in split doses",
+      "Treat seeds with Streptocycline before sowing"
+    ]
+  },
+  "brown_spot": {
+    "disease_id": "brown_spot",
+    "name": "Brown Spot",
+    "crop": "Paddy (Rice)",
+    "severity": "Moderate",
+    "symptoms": [
+      "Oval or circular brown spots with a yellow halo on leaves",
+      "Spots may coalesce and cause leaves to wither",
+      "Dark brown discoloration on rice grains"
+    ],
+    "causes": [
+      "Fungus Bipolaris oryzae",
+      "Nutrient-deficient or poorly drained soils",
+      "High humidity and warm temperatures (25-30 C)"
+    ],
+    "organic_controls": [
+      "Correct potassium/zinc soil deficiency first—Brown Spot is strongly linked to poor soil nutrition",
+      "Spray Trichoderma viride or Pseudomonas fluorescens @ 10 g/L at early symptom stage"
+    ],
+    "treatments": [
+      "Spray Mancozeb 75% WP @ 2 g/L or Carbendazim 50% WP @ 1 g/L only if spots cover >5-10% leaf area",
+      "Correct soil potassium and silicon deficiencies"
+    ],
+    "do_not_do": [
+      "Do NOT spray antibiotics or insecticides for Brown Spot (it is fungal + nutritional)",
+      "Do NOT exceed recommended label dosage"
+    ],
+    "preventions": [
+      "Use certified, disease-free seeds",
+      "Apply balanced NPK fertilizers",
+      "Maintain proper field drainage"
+    ]
+  },
+  "leaf_smut": {
+    "disease_id": "leaf_smut",
+    "name": "Leaf Smut",
+    "crop": "Paddy (Rice)",
+    "severity": "Low-Moderate",
+    "symptoms": [
+      "Small, slightly raised black linear spots on both sides of leaves",
+      "Leaves may turn yellow and senesce prematurely in severe cases"
+    ],
+    "causes": [
+      "Fungus Entyloma oryzae",
+      "High nitrogen levels and late-season humidity"
+    ],
+    "organic_controls": [
+      "Remove heavily spotted lower leaves manually and maintain clean bunds",
+      "Skip chemical spraying in mild cases—Leaf Smut rarely reduces yield on its own"
+    ],
+    "treatments": [
+      "Usually minor; apply Propiconazole 25% EC @ 1 mL/L ONLY if widespread across upper flag leaves"
+    ],
+    "do_not_do": [
+      "Do NOT buy expensive broad-spectrum chemical cocktails for minor Leaf Smut"
+    ],
+    "preventions": [
+      "Avoid excessive nitrogen application",
+      "Practice clean field sanitation and compost infected stubble after harvest"
+    ]
+  },
+  "blast": {
+    "disease_id": "blast",
+    "name": "Rice Blast",
+    "crop": "Paddy (Rice)",
+    "severity": "Critical",
+    "symptoms": [
+      "Diamond-shaped or spindle-shaped lesions with gray centers and brown margins",
+      "Neck rot causing panicles to break or turn white (chaffy grains)",
+      "Rapid drying of foliage in severe infections"
+    ],
+    "causes": [
+      "Fungus Magnaporthe oryzae",
+      "Cool nights, high humidity, and prolonged leaf wetness",
+      "Excessive nitrogen fertilization"
+    ],
+    "organic_controls": [
+      "Maintain shallow flooding (avoid drying/cracking stress) and stop nitrogen top-dressing immediately",
+      "Preventive spray of Pseudomonas fluorescens @ 10 g/L during tillering"
+    ],
+    "treatments": [
+      "Spray Tricyclazole 75% WP @ 0.6 g/L or Isoprothiolane 40% EC @ 1.5 mL/L",
+      "Repeat spray after 10-12 days ONLY if active lesions persist"
+    ],
+    "do_not_do": [
+      "Do NOT spray in strong midday heat or before heavy rain",
+      "Do NOT mix multiple unverified fungicides together"
+    ],
+    "preventions": [
+      "Plant blast-resistant rice varieties",
+      "Avoid dense planting and excessive nitrogen",
+      "Remove infected crop residues after harvest"
+    ]
+  },
+  "tungro": {
+    "disease_id": "tungro",
+    "name": "Rice Tungro Virus",
+    "crop": "Paddy (Rice)",
+    "severity": "High",
+    "symptoms": [
+      "Yellow-orange discoloration starting from leaf tips",
+      "Stunted plant growth and reduced tillering",
+      "Delayed flowering and incomplete panicle exertion"
+    ],
+    "causes": [
+      "Rice tungro bacilliform and spherical viruses",
+      "Transmitted by Green Leafhopper (Nephotettix virescens)"
+    ],
+    "organic_controls": [
+      "Uproot and bury infected plants early before leafhoppers spread the virus",
+      "Install yellow sticky traps (8-10/acre) to monitor Green Leafhoppers"
+    ],
+    "treatments": [
+      "Control green leafhopper vectors using Imidacloprid 17.8% SL @ 0.3 mL/L only when hopper threshold is exceeded"
+    ],
+    "do_not_do": [
+      "Do NOT spray fungicides—Tungro is a viral disease and fungicides have zero effect"
+    ],
+    "preventions": [
+      "Practice synchronous planting across neighboring fields",
+      "Use tungro-resistant varieties",
+      "Keep bunds free of grassy weeds"
+    ]
+  },
+  "normal": {
+    "disease_id": "normal",
+    "name": "Healthy Paddy Leaf",
+    "crop": "Paddy (Rice)",
+    "severity": "None",
+    "symptoms": [
+      "Uniform vibrant green leaf blade with no lesions or spots",
+      "Healthy tillering and upright leaf posture"
+    ],
+    "causes": [
+      "Optimal water, nutrient, and pest management"
+    ],
+    "organic_controls": [
+      "Continue balanced organic/compost nutrition and natural predator conservation"
+    ],
+    "treatments": [
+      "No chemical treatment required"
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical pesticides on a healthy crop"
+    ],
+    "preventions": [
+      "Continue regular field monitoring twice a week",
+      "Maintain balanced irrigation and fertilization"
+    ]
+  },
+  "tomato_early_blight": {
+    "disease_id": "tomato_early_blight",
+    "name": "Tomato Early Blight",
+    "crop": "Tomato",
+    "severity": "High",
+    "symptoms": [
+      "Dark brown circular spots with concentric 'target-board' rings on older lower leaves",
+      "Yellowing halo around lesions leading to premature leaf drop"
+    ],
+    "causes": [
+      "Fungus Alternaria solani",
+      "Warm humid weather and overhead irrigation splashing soil onto lower leaves"
+    ],
+    "organic_controls": [
+      "Prune and destroy infected lower leaves; mulch soil to prevent rain splash",
+      "Spray Trichoderma viride @ 5 g/L or Neem oil (1500 ppm) @ 3 mL/L"
+    ],
+    "treatments": [
+      "Spray Mancozeb 75% WP @ 2 g/L or Chlorothalonil 75% WP @ 2 g/L at 7-10 day intervals"
+    ],
+    "do_not_do": [
+      "Do NOT use overhead sprinklers in the evening",
+      "Do NOT mix multiple copper and sulfur sprays without label guidance"
+    ],
+    "preventions": [
+      "Rotate tomato with non-solanaceous crops (cereals/legumes) for 2-3 years",
+      "Stake plants for better airflow"
+    ]
+  },
+  "tomato_late_blight": {
+    "disease_id": "tomato_late_blight",
+    "name": "Tomato Late Blight",
+    "crop": "Tomato",
+    "severity": "Critical",
+    "symptoms": [
+      "Irregular water-soaked greenish-black patches on leaves and stems",
+      "White cottony fungal growth on leaf undersides during cool humid mornings"
+    ],
+    "causes": [
+      "Oomycete Phytophthora infestans",
+      "Cool, cloudy, wet weather (>85% humidity)"
+    ],
+    "organic_controls": [
+      "Immediately remove and bury severely infected plants to protect neighboring rows",
+      "Avoid dense canopy and improve field drainage"
+    ],
+    "treatments": [
+      "Spray Metalaxyl + Mancozeb (Ridomil Gold) @ 2 g/L or Cymoxanil + Mancozeb @ 2 g/L"
+    ],
+    "do_not_do": [
+      "Do NOT wait if cool wet weather persists—Late Blight can destroy a plot in days",
+      "Do NOT compost blighted vines near the field"
+    ],
+    "preventions": [
+      "Plant certified disease-free seedlings",
+      "Avoid planting near infected potato fields"
+    ]
+  },
+  "tomato_bacterial_spot": {
+    "disease_id": "tomato_bacterial_spot",
+    "name": "Tomato Bacterial Spot",
+    "crop": "Tomato",
+    "severity": "High",
+    "symptoms": [
+      "Small, dark, water-soaked greasy spots on leaves and green fruits",
+      "Leaves turn yellow and drop, exposing fruits to sunscald"
+    ],
+    "causes": [
+      "Xanthomonas spp. bacteria spread by wind-driven rain and infected seeds"
+    ],
+    "organic_controls": [
+      "Avoid working in the field when foliage is wet",
+      "Remove severely spotted lower leaves"
+    ],
+    "treatments": [
+      "Spray Copper oxychloride 50% WP @ 2.5 g/L + Streptocycline @ 0.1 g/L"
+    ],
+    "do_not_do": [
+      "Do NOT spray standard fungicides—they do not control bacterial spot"
+    ],
+    "preventions": [
+      "Use hot-water or Streptocycline-treated seeds",
+      "Follow 2-year crop rotation"
+    ]
+  },
+  "tomato_tomato_yellowleaf_curl_virus": {
+    "disease_id": "tomato_tomato_yellowleaf_curl_virus",
+    "name": "Tomato Yellow Leaf Curl Virus (TYLCV)",
+    "crop": "Tomato",
+    "severity": "Critical",
+    "symptoms": [
+      "Upward curling and cupping of young leaves with yellow margins",
+      "Severe stunting and flower drop"
+    ],
+    "causes": [
+      "Begomovirus transmitted by Whitefly (Bemisia tabaci)"
+    ],
+    "organic_controls": [
+      "Rogue out infected plants early and install yellow sticky traps (10/acre)",
+      "Spray Neem oil (1500 ppm) @ 3 mL/L to deter whiteflies"
+    ],
+    "treatments": [
+      "Manage whitefly vectors using Imidacloprid 17.8% SL @ 0.3 mL/L or Thiamethoxam 25% WG @ 0.2 g/L"
+    ],
+    "do_not_do": [
+      "Do NOT spray fungicides—TYLCV is a viral disease"
+    ],
+    "preventions": [
+      "Use insect-proof net nurseries and TYLCV-resistant hybrids"
+    ]
+  },
+  "potato_early_blight": {
+    "disease_id": "potato_early_blight",
+    "name": "Potato Early Blight",
+    "crop": "Potato",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Brown-black lesions with concentric rings on older leaves",
+      "Premature defoliation reducing tuber size"
+    ],
+    "causes": [
+      "Fungus Alternaria solani favored by warm alternating wet/dry weather"
+    ],
+    "organic_controls": [
+      "Maintain adequate nitrogen and potassium nutrition",
+      "Spray Trichoderma viride @ 5 g/L preventively"
+    ],
+    "treatments": [
+      "Spray Mancozeb 75% WP @ 2 g/L or Azoxystrobin 23% SC @ 1 mL/L"
+    ],
+    "do_not_do": [
+      "Do NOT under-fertilize—stressed potato plants suffer worse Early Blight"
+    ],
+    "preventions": [
+      "Use healthy seed tubers and 3-year crop rotation"
+    ]
+  },
+  "potato_late_blight": {
+    "disease_id": "potato_late_blight",
+    "name": "Potato Late Blight",
+    "crop": "Potato",
+    "severity": "Critical",
+    "symptoms": [
+      "Water-soaked dark lesions on leaf tips/margins with white mold underneath",
+      "Rapid stem rot and tuber brown rot"
+    ],
+    "causes": [
+      "Oomycete Phytophthora infestans in cool, humid, foggy weather"
+    ],
+    "organic_controls": [
+      "Hill up soil around tubers to block spore wash-down",
+      "Destroy volunteer potato plants"
+    ],
+    "treatments": [
+      "Spray Cymoxanil + Mancozeb @ 2 g/L or Dimethomorph + Mancozeb @ 2 g/L"
+    ],
+    "do_not_do": [
+      "Do NOT harvest tubers while blighted foliage is still green and wet"
+    ],
+    "preventions": [
+      "Plant certified blight-free seed tubers and resistant varieties"
+    ]
+  },
+  "pepper_bell_bacterial_spot": {
+    "disease_id": "pepper_bell_bacterial_spot",
+    "name": "Chilli / Pepper Bacterial Spot",
+    "crop": "Pepper / Chilli",
+    "severity": "High",
+    "symptoms": [
+      "Small water-soaked spots on leaves turning dark brown with yellow halos",
+      "Raised corky spots on pods"
+    ],
+    "causes": [
+      "Xanthomonas campestris pv. vesicatoria spread by rain splash"
+    ],
+    "organic_controls": [
+      "Avoid overhead watering and prune heavily infected leaves"
+    ],
+    "treatments": [
+      "Spray Copper hydroxide or Copper oxychloride 50% WP @ 2.5 g/L"
+    ],
+    "do_not_do": [
+      "Do NOT use fungicides alone for bacterial spot"
+    ],
+    "preventions": [
+      "Use disease-free seeds and 2-3 year rotation"
+    ]
+  },
+  "corn_maize_common_rust": {
+    "disease_id": "corn_maize_common_rust",
+    "name": "Maize Common Rust",
+    "crop": "Maize / Corn",
+    "severity": "Moderate",
+    "symptoms": [
+      "Small cinnamon-brown powdery pustules on both upper and lower leaf surfaces"
+    ],
+    "causes": [
+      "Fungus Puccinia sorghi favored by cool, humid nights (16-23 C)"
+    ],
+    "organic_controls": [
+      "Grow resistant maize hybrids; mild rust rarely needs chemical spray"
+    ],
+    "treatments": [
+      "Spray Mancozeb 75% WP @ 2 g/L or Propiconazole 25% EC @ 1 mL/L if severe before tasseling"
+    ],
+    "do_not_do": [
+      "Do NOT spray late after grain-filling is complete"
+    ],
+    "preventions": [
+      "Select rust-resistant hybrids and avoid late planting"
+    ]
+  },
+  "apple_apple_scab": {
+    "disease_id": "apple_apple_scab",
+    "name": "Apple Scab",
+    "crop": "Apple",
+    "severity": "High",
+    "symptoms": [
+      "Olive-green to dark velvety spots on leaves and scabby lesions on fruit"
+    ],
+    "causes": [
+      "Fungus Venturia inaequalis overwintering in fallen leaves"
+    ],
+    "organic_controls": [
+      "Rake and compost/burn fallen leaves in autumn to break the cycle"
+    ],
+    "treatments": [
+      "Spray Captan 50% WP @ 2 g/L or Dodine 65% WP @ 1 g/L at green-tip/petal-fall"
+    ],
+    "do_not_do": [
+      "Do NOT leave infected leaf litter under trees"
+    ],
+    "preventions": [
+      "Prune canopy for airflow and plant scab-resistant cultivars"
+    ]
+  },
+  "grape_black_rot": {
+    "disease_id": "grape_black_rot",
+    "name": "Grape Black Rot",
+    "crop": "Grape",
+    "severity": "High",
+    "symptoms": [
+      "Reddish-brown leaf spots with black fruiting bodies; shriveled black 'mummy' berries"
+    ],
+    "causes": [
+      "Fungus Guignardia bidwellii in warm, wet spring/summer weather"
+    ],
+    "organic_controls": [
+      "Remove mummified berries and prune canes for sun/air penetration"
+    ],
+    "treatments": [
+      "Spray Mancozeb 75% WP @ 2 g/L or Myclobutanil 10% WP @ 0.4 g/L"
+    ],
+    "do_not_do": [
+      "Do NOT leave mummified clusters hanging on vines"
+    ],
+    "preventions": [
+      "Sanitize vineyard floor and train vines on open trellises"
+    ]
+  },
+  "apple_black_rot": {
+    "disease_id": "apple_black_rot",
+    "name": "Apple — Black Rot",
+    "crop": "Apple",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible black rot lesions, discoloration, or damage on apple foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with black rot under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted black rot control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "apple_cedar_apple_rust": {
+    "disease_id": "apple_cedar_apple_rust",
+    "name": "Apple — Cedar Apple Rust",
+    "crop": "Apple",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible cedar apple rust lesions, discoloration, or damage on apple foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with cedar apple rust under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted cedar apple rust control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "apple_healthy": {
+    "disease_id": "apple_healthy",
+    "name": "Healthy Apple Leaf",
+    "crop": "Apple",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "blueberry_healthy": {
+    "disease_id": "blueberry_healthy",
+    "name": "Healthy Blueberry Leaf",
+    "crop": "Blueberry",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "cherry_including_sour_powdery_mildew": {
+    "disease_id": "cherry_including_sour_powdery_mildew",
+    "name": "Cherry (Including Sour) — Powdery Mildew",
+    "crop": "Cherry (Including Sour)",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible powdery mildew lesions, discoloration, or damage on cherry (including sour) foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with powdery mildew under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted powdery mildew control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "cherry_including_sour_healthy": {
+    "disease_id": "cherry_including_sour_healthy",
+    "name": "Healthy Cherry (Including Sour) Leaf",
+    "crop": "Cherry (Including Sour)",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "corn_maize_cercospora_leaf_spot_gray_leaf_spot": {
+    "disease_id": "corn_maize_cercospora_leaf_spot_gray_leaf_spot",
+    "name": "Corn (Maize) — Cercospora Leaf Spot Gray Leaf Spot",
+    "crop": "Corn (Maize)",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible cercospora leaf spot gray leaf spot lesions, discoloration, or damage on corn (maize) foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with cercospora leaf spot gray leaf spot under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted cercospora leaf spot gray leaf spot control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "corn_maize_northern_leaf_blight": {
+    "disease_id": "corn_maize_northern_leaf_blight",
+    "name": "Corn (Maize) — Northern Leaf Blight",
+    "crop": "Corn (Maize)",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible northern leaf blight lesions, discoloration, or damage on corn (maize) foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with northern leaf blight under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted northern leaf blight control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "corn_maize_healthy": {
+    "disease_id": "corn_maize_healthy",
+    "name": "Healthy Corn (Maize) Leaf",
+    "crop": "Corn (Maize)",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "grape_esca_black_measles": {
+    "disease_id": "grape_esca_black_measles",
+    "name": "Grape — Esca (Black Measles)",
+    "crop": "Grape",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible esca (black measles) lesions, discoloration, or damage on grape foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with esca (black measles) under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted esca (black measles) control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "grape_leaf_blight_isariopsis_leaf_spot": {
+    "disease_id": "grape_leaf_blight_isariopsis_leaf_spot",
+    "name": "Grape — Leaf Blight (Isariopsis Leaf Spot)",
+    "crop": "Grape",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible leaf blight (isariopsis leaf spot) lesions, discoloration, or damage on grape foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with leaf blight (isariopsis leaf spot) under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted leaf blight (isariopsis leaf spot) control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "grape_healthy": {
+    "disease_id": "grape_healthy",
+    "name": "Healthy Grape Leaf",
+    "crop": "Grape",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "orange_haunglongbing_citrus_greening": {
+    "disease_id": "orange_haunglongbing_citrus_greening",
+    "name": "Orange — Haunglongbing (Citrus Greening)",
+    "crop": "Orange",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible haunglongbing (citrus greening) lesions, discoloration, or damage on orange foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with haunglongbing (citrus greening) under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted haunglongbing (citrus greening) control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "peach_bacterial_spot": {
+    "disease_id": "peach_bacterial_spot",
+    "name": "Peach — Bacterial Spot",
+    "crop": "Peach",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible bacterial spot lesions, discoloration, or damage on peach foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with bacterial spot under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted bacterial spot control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "peach_healthy": {
+    "disease_id": "peach_healthy",
+    "name": "Healthy Peach Leaf",
+    "crop": "Peach",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "pepper_bell_healthy": {
+    "disease_id": "pepper_bell_healthy",
+    "name": "Healthy Pepper Bell Leaf",
+    "crop": "Pepper Bell",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "potato_healthy": {
+    "disease_id": "potato_healthy",
+    "name": "Healthy Potato Leaf",
+    "crop": "Potato",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "raspberry_healthy": {
+    "disease_id": "raspberry_healthy",
+    "name": "Healthy Raspberry Leaf",
+    "crop": "Raspberry",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "soybean_healthy": {
+    "disease_id": "soybean_healthy",
+    "name": "Healthy Soybean Leaf",
+    "crop": "Soybean",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "squash_powdery_mildew": {
+    "disease_id": "squash_powdery_mildew",
+    "name": "Squash — Powdery Mildew",
+    "crop": "Squash",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible powdery mildew lesions, discoloration, or damage on squash foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with powdery mildew under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted powdery mildew control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "strawberry_leaf_scorch": {
+    "disease_id": "strawberry_leaf_scorch",
+    "name": "Strawberry — Leaf Scorch",
+    "crop": "Strawberry",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible leaf scorch lesions, discoloration, or damage on strawberry foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with leaf scorch under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted leaf scorch control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "strawberry_healthy": {
+    "disease_id": "strawberry_healthy",
+    "name": "Healthy Strawberry Leaf",
+    "crop": "Strawberry",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "tomato_leaf_mold": {
+    "disease_id": "tomato_leaf_mold",
+    "name": "Tomato — Leaf Mold",
+    "crop": "Tomato",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible leaf mold lesions, discoloration, or damage on tomato foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with leaf mold under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted leaf mold control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "tomato_septoria_leaf_spot": {
+    "disease_id": "tomato_septoria_leaf_spot",
+    "name": "Tomato — Septoria Leaf Spot",
+    "crop": "Tomato",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible septoria leaf spot lesions, discoloration, or damage on tomato foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with septoria leaf spot under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted septoria leaf spot control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "tomato_spider_mites_two_spotted_spider_mite": {
+    "disease_id": "tomato_spider_mites_two_spotted_spider_mite",
+    "name": "Tomato — Spider Mites Two-Spotted Spider Mite",
+    "crop": "Tomato",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible spider mites two-spotted spider mite lesions, discoloration, or damage on tomato foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with spider mites two-spotted spider mite under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted spider mites two-spotted spider mite control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "tomato_target_spot": {
+    "disease_id": "tomato_target_spot",
+    "name": "Tomato — Target Spot",
+    "crop": "Tomato",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible target spot lesions, discoloration, or damage on tomato foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with target spot under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted target spot control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "tomato_tomato_yellow_leaf_curl_virus": {
+    "disease_id": "tomato_tomato_yellow_leaf_curl_virus",
+    "name": "Tomato — Tomato Yellow Leaf Curl Virus",
+    "crop": "Tomato",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible tomato yellow leaf curl virus lesions, discoloration, or damage on tomato foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with tomato yellow leaf curl virus under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted tomato yellow leaf curl virus control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "tomato_tomato_mosaic_virus": {
+    "disease_id": "tomato_tomato_mosaic_virus",
+    "name": "Tomato — Tomato Mosaic Virus",
+    "crop": "Tomato",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible tomato mosaic virus lesions, discoloration, or damage on tomato foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with tomato mosaic virus under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted tomato mosaic virus control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "tomato_healthy": {
+    "disease_id": "tomato_healthy",
+    "name": "Healthy Tomato Leaf",
+    "crop": "Tomato",
+    "severity": "None",
+    "symptoms": [
+      "No visible lesions, chlorosis, or fungal spots on leaf surface."
+    ],
+    "causes": [
+      "Optimal nutrition, irrigation, and field hygiene."
+    ],
+    "organic_controls": [
+      "Continue weekly scouting and compost/bio-fertilizer schedule."
+    ],
+    "treatments": [
+      "No pesticide or fungicide needed."
+    ],
+    "do_not_do": [
+      "Do NOT apply preventive chemical sprays when the crop is healthy."
+    ],
+    "preventions": [
+      "Maintain balanced NPK nutrition, proper spacing, and clean irrigation."
+    ]
+  },
+  "bacterial_leaf_streak": {
+    "disease_id": "bacterial_leaf_streak",
+    "name": "Paddy (Rice) — Bacterial Leaf Streak",
+    "crop": "Paddy (Rice)",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible bacterial leaf streak lesions, discoloration, or damage on paddy (rice) foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with bacterial leaf streak under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted bacterial leaf streak control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "bacterial_panicle_blight": {
+    "disease_id": "bacterial_panicle_blight",
+    "name": "Paddy (Rice) — Bacterial Panicle Blight",
+    "crop": "Paddy (Rice)",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible bacterial panicle blight lesions, discoloration, or damage on paddy (rice) foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with bacterial panicle blight under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted bacterial panicle blight control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "dead_heart": {
+    "disease_id": "dead_heart",
+    "name": "Paddy (Rice) — Dead Heart",
+    "crop": "Paddy (Rice)",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible dead heart lesions, discoloration, or damage on paddy (rice) foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with dead heart under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted dead heart control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "downy_mildew": {
+    "disease_id": "downy_mildew",
+    "name": "Paddy (Rice) — Downy Mildew",
+    "crop": "Paddy (Rice)",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible downy mildew lesions, discoloration, or damage on paddy (rice) foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with downy mildew under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted downy mildew control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  },
+  "hispa": {
+    "disease_id": "hispa",
+    "name": "Paddy (Rice) — Hispa",
+    "crop": "Paddy (Rice)",
+    "severity": "Moderate-High",
+    "symptoms": [
+      "Visible hispa lesions, discoloration, or damage on paddy (rice) foliage."
+    ],
+    "causes": [
+      "Pathogen or pest pressure associated with hispa under favorable humidity/temperature."
+    ],
+    "organic_controls": [
+      "Prune and destroy heavily infected leaves away from the field.",
+      "Apply Neem oil (3-5 mL/L) or Trichoderma/Pseudomonas bio-control as early intervention."
+    ],
+    "treatments": [
+      "Consult local KVK or agri-extension officer for targeted hispa control if spread exceeds 10%.",
+      "Ensure proper field drainage and avoid overhead irrigation."
+    ],
+    "do_not_do": [
+      "Do NOT mix unverified chemical cocktails.",
+      "Do NOT over-apply nitrogen fertilizer during active infection."
+    ],
+    "preventions": [
+      "Use certified disease-free seeds or resistant varieties.",
+      "Practice crop rotation and maintain proper plant spacing."
+    ]
+  }
+}

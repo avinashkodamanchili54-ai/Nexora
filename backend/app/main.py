@@ -5,6 +5,8 @@ from fastapi.responses import JSONResponse
 
 from app.routers import (
     assistant,
+    auth,
+    alerts,
     diseases,
     farmers,
     history,
@@ -64,6 +66,8 @@ async def validation_exception_handler(_request: Request, exc: RequestValidation
     )
 
 
+app.include_router(auth.router)
+app.include_router(alerts.router)
 app.include_router(predict.router)
 app.include_router(investigate.router)
 app.include_router(assistant.router)

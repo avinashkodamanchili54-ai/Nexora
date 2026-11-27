@@ -9,9 +9,20 @@ from app.data.disease_db import DISEASE_DB
 
 
 class MLService:
-    """Multi-model MobileNetV2 disease classifier (Rice, PlantDoc, PlantVillage)."""
+    """Dual-model MobileNetV2 disease classifier (PlantVillage multi-crop + Paddy Doctor)."""
 
-    DEFAULT_RICE_CLASSES = ["Bacterial leaf blight", "Brown spot", "Leaf smut"]
+    DEFAULT_PADDY_CLASSES = [
+        "bacterial_leaf_blight",
+        "bacterial_leaf_streak",
+        "bacterial_panicle_blight",
+        "blast",
+        "brown_spot",
+        "dead_heart",
+        "downy_mildew",
+        "hispa",
+        "normal",
+        "tungro",
+    ]
     DEFAULT_GENERAL_CLASSES = list(DISEASE_DB.keys())
 
     def __init__(self) -> None:
@@ -37,8 +48,6 @@ class MLService:
 
         model_files = {
             "paddy_doctor": MODELS_DIR / "paddy_doctor_model.keras",
-            "rice": MODELS_DIR / "rice_model.keras",
-            "plantdoc": MODELS_DIR / "plantdoc_model.keras",
             "plantvillage": MODELS_DIR / "plantvillage_model.keras",
         }
         for key, path in model_files.items():
@@ -54,12 +63,8 @@ class MLService:
 
     def _resolve_model_key(self, crop_mode: str) -> str:
         if crop_mode == "paddy":
-            if "paddy_doctor" in self.models or (MODELS_DIR / "paddy_doctor_model.keras").exists():
-                return "paddy_doctor"
-            return "rice"
-        return {"field": "plantdoc", "general": "plantvillage"}.get(
-            crop_mode, "plantvillage"
-        )
+            return "paddy_doctor"
+        return "plantvillage"
 
     def predict_disease(self, image_bytes: bytes, crop_mode: str = "paddy") -> Tuple[str, float, str]:
         """Return (raw_class_name, confidence, model_mode) for an uploaded leaf image."""
@@ -69,7 +74,7 @@ class MLService:
         model_key = self._resolve_model_key(crop_mode)
         model = self.models.get(model_key)
         classes = self.class_mapping.get(model_key) or (
-            self.DEFAULT_RICE_CLASSES if model_key == "rice" else self.DEFAULT_GENERAL_CLASSES
+            self.DEFAULT_PADDY_CLASSES if model_key == "paddy_doctor" else self.DEFAULT_GENERAL_CLASSES
         )
 
         if model is not None:
@@ -89,7 +94,7 @@ class MLService:
         return classes[idx], confidence, f"local-heuristic-fallback ({model_key})"
 
     def get_status(self) -> List[dict]:
-        """Return availability and evaluation metrics for all 3 models."""
+        """Return availability and evaluation metrics for the active models."""
         eval_path = RESULTS_DIR / "evaluation_summary.json"
         if eval_path.exists():
             try:
@@ -97,7 +102,7 @@ class MLService:
             except Exception:
                 pass
         items = []
-        for key, default_count in [("plantvillage", 38), ("paddy_doctor", 10), ("rice", 3)]:
+        for key, default_count in [("plantvillage", 38), ("paddy_doctor", 10)]:
             classes = self.class_mapping.get(key, [])
             metrics = self.eval_summary.get(key, {})
             file_exists = (MODELS_DIR / f"{key}_model.keras").exists()
