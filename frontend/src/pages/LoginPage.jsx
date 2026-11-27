@@ -7,7 +7,7 @@ import i18n from "../i18n";
 export default function LoginPage({ onNavigate }) {
   const { t } = useTranslation();
   const { login } = useAuth();
-  const [form, setForm] = useState({ phone: "", password: "" });
+  const [form, setForm] = useState({ identifier: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -16,15 +16,30 @@ export default function LoginPage({ onNavigate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (!form.identifier.trim()) {
+      setError("Please enter your phone number or email.");
+      return;
+    }
+    if (!form.password) {
+      setError("Please enter your password.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch(`${API_BASE}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          identifier: form.identifier.trim(),
+          password: form.password,
+        }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error?.message || "Login failed");
+      if (!res.ok) {
+        throw new Error(data?.error?.message || data?.detail || "Login failed");
+      }
       if (data.user?.preferred_language) {
         i18n.changeLanguage(data.user.preferred_language);
         localStorage.setItem("nexora_lang", data.user.preferred_language);
@@ -54,14 +69,30 @@ export default function LoginPage({ onNavigate }) {
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
-            <label htmlFor="login-phone">{t("auth.phone")}</label>
-            <input id="login-phone" name="phone" type="tel" value={form.phone}
-              onChange={handleChange} required placeholder="9876543210" autoComplete="tel" />
+            <label htmlFor="login-identifier">{t("auth.identifier")}</label>
+            <input
+              id="login-identifier"
+              name="identifier"
+              type="text"
+              value={form.identifier}
+              onChange={handleChange}
+              required
+              placeholder="e.g. 9876543210 or farmer@example.com"
+              autoComplete="username"
+            />
           </div>
           <div className="form-group">
             <label htmlFor="login-password">{t("auth.password")}</label>
-            <input id="login-password" name="password" type="password" value={form.password}
-              onChange={handleChange} required autoComplete="current-password" />
+            <input
+              id="login-password"
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              placeholder="Enter your password"
+              autoComplete="current-password"
+            />
           </div>
           <button type="submit" className="btn-primary btn-full" disabled={loading}>
             {loading ? "Logging in…" : t("auth.loginCta")}
@@ -76,4 +107,3 @@ export default function LoginPage({ onNavigate }) {
     </div>
   );
 }
-

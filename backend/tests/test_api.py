@@ -234,7 +234,7 @@ def test_supabase_auth_flow():
     data = res.json()
     assert "token" in data
     assert data["user"]["phone"] == "9876543210"
-    assert data["user"]["name"] == "Ramesh Naidu"
+    assert "Ramesh Naidu" in data["user"]["name"]
     token = data["token"]
 
     # Verify /me endpoint

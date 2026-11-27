@@ -1,6 +1,7 @@
 """
 User store: Supabase PostgreSQL database.
 Direct connection via psycopg2 connection pool with fallback to Supabase REST client.
+Supports phone and email lookup.
 """
 import json
 import time
@@ -49,16 +50,21 @@ def _format_row(row: dict) -> dict:
     return item
 
 
-def get_user(phone: str) -> Optional[dict]:
-    phone = phone.strip()
+def get_user(identifier: str) -> Optional[dict]:
+    identifier = identifier.strip().lower()
     try:
         pool = _get_pool()
         conn = pool.getconn()
         try:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(
-                    "SELECT phone, user_id, name, password_hash, preferred_language, crop_type, crop_mode, farm_profile, created_at FROM public.users WHERE phone = %s LIMIT 1;",
-                    (phone,),
+                    """
+                    SELECT phone, email, user_id, name, password_hash, preferred_language, crop_type, crop_mode, farm_profile, created_at
+                    FROM public.users
+                    WHERE LOWER(phone) = %s OR LOWER(COALESCE(email, '')) = %s
+                    LIMIT 1;
+                    """,
+                    (identifier, identifier),
                 )
                 row = cur.fetchone()
                 if row:
@@ -69,7 +75,7 @@ def get_user(phone: str) -> Optional[dict]:
         # Fallback to Supabase client
         try:
             client = _get_supabase_client()
-            res = client.table("users").select("*").eq("phone", phone).limit(1).execute()
+            res = client.table("users").select("*").or_(f"phone.eq.{identifier},email.eq.{identifier}").limit(1).execute()
             if res.data and len(res.data) > 0:
                 return _format_row(res.data[0])
         except Exception:
@@ -84,9 +90,13 @@ def create_user(
     preferred_language: str,
     crop_type: str,
     crop_mode: str,
+    email: Optional[str] = None,
 ) -> dict:
+    clean_phone = phone.strip()
+    clean_email = email.strip().lower() if email else None
     user = {
-        "phone": phone.strip(),
+        "phone": clean_phone,
+        "email": clean_email,
         "user_id": str(uuid.uuid4()),
         "name": name.strip(),
         "password_hash": password_hash,
@@ -104,11 +114,12 @@ def create_user(
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    INSERT INTO public.users (phone, user_id, name, password_hash, preferred_language, crop_type, crop_mode, farm_profile, created_at)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+                    INSERT INTO public.users (phone, email, user_id, name, password_hash, preferred_language, crop_type, crop_mode, farm_profile, created_at)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
                     """,
                     (
                         user["phone"],
+                        user["email"],
                         user["user_id"],
                         user["name"],
                         user["password_hash"],
@@ -130,21 +141,24 @@ def create_user(
         return user
 
 
-def update_user(phone: str, updates: dict) -> Optional[dict]:
-    phone = phone.strip()
+def update_user(identifier: str, updates: dict) -> Optional[dict]:
+    identifier = identifier.strip().lower()
     if not updates:
-        return get_user(phone)
+        return get_user(identifier)
 
     allowed_keys = {
         "name",
+        "email",
         "preferred_language",
         "crop_type",
         "crop_mode",
         "farm_profile",
     }
     filtered = {k: v for k, v in updates.items() if k in allowed_keys}
+    if "email" in filtered and filtered["email"]:
+        filtered["email"] = filtered["email"].strip().lower()
     if not filtered:
-        return get_user(phone)
+        return get_user(identifier)
 
     try:
         pool = _get_pool()
@@ -158,9 +172,13 @@ def update_user(phone: str, updates: dict) -> Optional[dict]:
                     values.append(json.dumps(v))
                 else:
                     values.append(v)
-            values.append(phone)
+            values.extend([identifier, identifier])
 
-            sql = f"UPDATE public.users SET {', '.join(set_clauses)} WHERE phone = %s RETURNING phone, user_id, name, password_hash, preferred_language, crop_type, crop_mode, farm_profile, created_at;"
+            sql = f"""
+                UPDATE public.users SET {', '.join(set_clauses)}
+                WHERE LOWER(phone) = %s OR LOWER(COALESCE(email, '')) = %s
+                RETURNING phone, email, user_id, name, password_hash, preferred_language, crop_type, crop_mode, farm_profile, created_at;
+            """
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(sql, tuple(values))
                 row = cur.fetchone()
@@ -172,14 +190,20 @@ def update_user(phone: str, updates: dict) -> Optional[dict]:
     except Exception:
         try:
             client = _get_supabase_client()
-            res = client.table("users").update(filtered).eq("phone", phone).execute()
+            res = client.table("users").update(filtered).or_(f"phone.eq.{identifier},email.eq.{identifier}").execute()
             if res.data and len(res.data) > 0:
                 return _format_row(res.data[0])
         except Exception:
             pass
 
-    return get_user(phone)
+    return get_user(identifier)
 
 
 def phone_exists(phone: str) -> bool:
     return get_user(phone) is not None
+
+
+def email_exists(email: str) -> bool:
+    if not email:
+        return False
+    return get_user(email) is not None

@@ -9,6 +9,7 @@ export default function ProfilePage({ onNavigate }) {
   const { user, token, updateProfile } = useAuth();
   const [form, setForm] = useState({
     name: user?.name || "",
+    email: user?.email || "",
     preferred_language: user?.preferred_language || "en",
     crop_type: user?.crop_type || "Paddy (Rice)",
     crop_mode: user?.crop_mode || "paddy",
@@ -136,6 +137,10 @@ export default function ProfilePage({ onNavigate }) {
           <div className="form-group">
             <label htmlFor="p-name">{t("auth.name")}</label>
             <input id="p-name" name="name" value={form.name} onChange={handleChange} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="p-email">{t("auth.email")}</label>
+            <input id="p-email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="e.g. farmer@example.com" />
           </div>
           <div className="form-row">
             <div className="form-group">

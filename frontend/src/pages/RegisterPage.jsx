@@ -8,7 +8,13 @@ export default function RegisterPage({ onNavigate }) {
   const { t } = useTranslation();
   const { login } = useAuth();
   const [form, setForm] = useState({
-    name: "", phone: "", password: "", preferred_language: "en", crop_type: "Paddy (Rice)", crop_mode: "paddy",
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    preferred_language: "en",
+    crop_type: "Paddy (Rice)",
+    crop_mode: "paddy",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,15 +33,41 @@ export default function RegisterPage({ onNavigate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    // Client-side quick check
+    if (!form.name.trim()) {
+      setError("Please enter your full name.");
+      return;
+    }
+    if (form.email && !form.email.includes("@")) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (!form.phone.trim() || form.phone.replace(/\D/g, "").length < 10) {
+      setError("Please enter a valid 10-digit phone number.");
+      return;
+    }
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch(`${API_BASE}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          name: form.name.trim(),
+          email: form.email.trim() || null,
+          phone: form.phone.trim(),
+        }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error?.message || "Registration failed");
+      if (!res.ok) {
+        throw new Error(data?.error?.message || data?.detail || "Registration failed");
+      }
       login(data.token, data.user);
       localStorage.setItem("nexora_lang", form.preferred_language);
       onNavigate("dashboard");
@@ -62,31 +94,87 @@ export default function RegisterPage({ onNavigate }) {
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
-            <label htmlFor="reg-name">{t("auth.name")}</label>
-            <input id="reg-name" name="name" type="text" value={form.name}
-              onChange={handleChange} required placeholder="Ramesh Naidu" />
+            <label htmlFor="reg-name">{t("auth.name")} *</label>
+            <input
+              id="reg-name"
+              name="name"
+              type="text"
+              value={form.name}
+              onChange={handleChange}
+              required
+              placeholder="e.g. Dhanaraju Bokka"
+              autoComplete="name"
+            />
           </div>
+
           <div className="form-group">
-            <label htmlFor="reg-phone">{t("auth.phone")}</label>
-            <input id="reg-phone" name="phone" type="tel" value={form.phone}
-              onChange={handleChange} required placeholder="9876543210" maxLength={10} />
+            <label htmlFor="reg-email">{t("auth.email")} (Optional)</label>
+            <input
+              id="reg-email"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="e.g. farmer@example.com"
+              autoComplete="email"
+            />
           </div>
+
           <div className="form-group">
-            <label htmlFor="reg-password">{t("auth.password")}</label>
-            <input id="reg-password" name="password" type="password" value={form.password}
-              onChange={handleChange} required minLength={6} />
+            <label htmlFor="reg-phone">{t("auth.phone")} *</label>
+            <input
+              id="reg-phone"
+              name="phone"
+              type="tel"
+              value={form.phone}
+              onChange={handleChange}
+              required
+              placeholder="e.g. 9876543210"
+              maxLength={15}
+              autoComplete="tel"
+            />
           </div>
+
+          <div className="form-group">
+            <label htmlFor="reg-password">{t("auth.password")} *</label>
+            <input
+              id="reg-password"
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              minLength={6}
+              placeholder="At least 6 characters"
+              autoComplete="new-password"
+            />
+          </div>
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="reg-language">{t("auth.language")}</label>
-              <select id="reg-language" name="preferred_language" value={form.preferred_language} onChange={handleChange}>
-                {LANGUAGES.map((l) => <option key={l.code} value={l.code}>{l.label}</option>)}
+              <select
+                id="reg-language"
+                name="preferred_language"
+                value={form.preferred_language}
+                onChange={handleChange}
+              >
+                {LANGUAGES.map((l) => (
+                  <option key={l.code} value={l.code}>{l.label}</option>
+                ))}
               </select>
             </div>
             <div className="form-group">
               <label htmlFor="reg-crop">{t("auth.cropType")}</label>
-              <select id="reg-crop" name="crop_type" value={form.crop_type} onChange={handleChange}>
-                {CROP_PRESETS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+              <select
+                id="reg-crop"
+                name="crop_type"
+                value={form.crop_type}
+                onChange={handleChange}
+              >
+                {CROP_PRESETS.map((c) => (
+                  <option key={c.value} value={c.value}>{c.label}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -95,6 +183,7 @@ export default function RegisterPage({ onNavigate }) {
             {loading ? "Creating account…" : t("auth.registerCta")}
           </button>
         </form>
+
         <p className="auth-switch">
           <button type="button" className="link-btn" onClick={() => onNavigate("login")}>
             {t("auth.hasAccount")}
@@ -104,4 +193,3 @@ export default function RegisterPage({ onNavigate }) {
     </div>
   );
 }
-
