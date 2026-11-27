@@ -58,13 +58,17 @@ class MLService:
                 import tensorflow as tf  # type: ignore
 
                 self.models[key] = tf.keras.models.load_model(path)
-            except Exception:
-                # TensorFlow may not be installed in lightweight backend venvs
-                pass
+                print(f"[MLService] Successfully loaded {key} model from {path.name}")
+            except Exception as e:
+                print(f"[MLService] WARNING: Could not load {key} ({e})")
 
-    def _resolve_model_key(self, crop_mode: str, crop_name: str = "") -> str:
+    def _resolve_model_key(self, crop_mode: str = "", crop_name: str = "") -> str:
         norm_name = (crop_name or "").strip().lower()
-        if crop_mode == "paddy" or "paddy" in norm_name or "rice" in norm_name:
+        if "paddy" in norm_name or "rice" in norm_name:
+            return "paddy_doctor"
+        if norm_name and norm_name not in {"paddy", "rice", "all", "general", ""}:
+            return "plantvillage"
+        if crop_mode == "paddy":
             return "paddy_doctor"
         return "plantvillage"
 
@@ -152,7 +156,7 @@ class MLService:
             items.append(
                 {
                     "key": key,
-                    "loaded": key in self.models or file_exists,
+                    "loaded": key in self.models,
                     "classes_count": len(classes) if classes else default_count,
                     "accuracy": metrics.get("accuracy"),
                     "macro_f1": metrics.get("macro_f1"),
