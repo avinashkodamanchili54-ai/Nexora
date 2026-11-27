@@ -91,7 +91,9 @@ async def predict_crop_disease(
 
     heatmap_data_url = image_quality_service.generate_lesion_heatmap_b64(image_bytes)
 
-    raw_label, confidence, model_mode = ml_service.predict_disease(image_bytes, crop_mode)
+    raw_label, confidence, model_mode = ml_service.predict_disease(
+        image_bytes, crop_mode=crop_mode, crop_name=crop_name
+    )
     guidance = recommendation_service.get_guidance(raw_label)
     if guidance is None:
         raise HTTPException(status_code=404, detail="Disease guidance not found.")

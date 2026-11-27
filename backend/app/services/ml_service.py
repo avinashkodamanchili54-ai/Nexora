@@ -61,17 +61,20 @@ class MLService:
                 # TensorFlow may not be installed in lightweight backend venvs
                 pass
 
-    def _resolve_model_key(self, crop_mode: str) -> str:
-        if crop_mode == "paddy":
+    def _resolve_model_key(self, crop_mode: str, crop_name: str = "") -> str:
+        norm_name = (crop_name or "").strip().lower()
+        if crop_mode == "paddy" or "paddy" in norm_name or "rice" in norm_name:
             return "paddy_doctor"
         return "plantvillage"
 
-    def predict_disease(self, image_bytes: bytes, crop_mode: str = "paddy") -> Tuple[str, float, str]:
+    def predict_disease(
+        self, image_bytes: bytes, crop_mode: str = "paddy", crop_name: str = ""
+    ) -> Tuple[str, float, str]:
         """Return (raw_class_name, confidence, model_mode) for an uploaded leaf image."""
         img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         img = img.resize((224, 224))
 
-        model_key = self._resolve_model_key(crop_mode)
+        model_key = self._resolve_model_key(crop_mode, crop_name)
         model = self.models.get(model_key)
         classes = self.class_mapping.get(model_key) or (
             self.DEFAULT_PADDY_CLASSES if model_key == "paddy_doctor" else self.DEFAULT_GENERAL_CLASSES

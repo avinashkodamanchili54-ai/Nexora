@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CROP_MODES, LANGUAGES, UI_STRINGS } from "../constants";
+import { CROP_MODES, CROP_PRESETS, LANGUAGES, UI_STRINGS } from "../constants";
 
 function ScoreGauge({ value, label }) {
   const radius = 26;
@@ -60,6 +60,8 @@ export default function SmartLeafScannerPanel({
   onLanguageChange,
   cropMode,
   onCropModeChange,
+  selectedCrop,
+  onSelectedCropChange,
   onScan,
   loading,
   error,
@@ -114,6 +116,26 @@ export default function SmartLeafScannerPanel({
 
       <div className="controls-grid">
         <div className="field">
+          <label htmlFor="scan-crop">Select Crop</label>
+          <select
+            id="scan-crop"
+            value={selectedCrop || "Paddy (Rice)"}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (onSelectedCropChange) onSelectedCropChange(val);
+              const isPaddy = val.toLowerCase().includes("paddy") || val.toLowerCase().includes("rice");
+              onCropModeChange(isPaddy ? "paddy" : "general");
+            }}
+          >
+            {CROP_PRESETS.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label} ({c.mode === "paddy" ? "Paddy Model" : "PlantVillage Model"})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="field">
           <label htmlFor="scan-lang">Report &amp; Voice Output Language</label>
           <select
             id="scan-lang"
@@ -127,6 +149,25 @@ export default function SmartLeafScannerPanel({
             ))}
           </select>
         </div>
+      </div>
+
+      <div className="model-active-badge" style={{
+        padding: "8px 14px",
+        margin: "0 0 16px",
+        borderRadius: "8px",
+        background: cropMode === "paddy" ? "#f0fdf4" : "#eff6ff",
+        border: `1.5px solid ${cropMode === "paddy" ? "#86efac" : "#93c5fd"}`,
+        color: cropMode === "paddy" ? "#166534" : "#1e40af",
+        fontSize: "0.875rem",
+        fontWeight: 600,
+        display: "flex",
+        alignItems: "center",
+        gap: "8px"
+      }}>
+        <span>{cropMode === "paddy" ? "🌾" : "🌿"}</span>
+        <span>
+          <strong>Active AI Engine:</strong> {cropMode === "paddy" ? "Paddy Doctor Specialist (10 Classes) — Activated for Paddy" : "PlantVillage Multi-Crop AI (38 Classes) — Activated for all other crops"}
+        </span>
       </div>
 
       <div

@@ -92,7 +92,20 @@ function AppShell() {
   const [scanResult, setScanResult] = useState(null);
   const [scanPreviewUrl, setScanPreviewUrl] = useState("");
   const [refining, setRefining] = useState(false);
-  const [cropMode, setCropMode] = useState(user?.crop_mode || "general");
+  const [selectedScanCrop, setSelectedScanCrop] = useState(farmProfile.crop || "Paddy (Rice)");
+  const [cropMode, setCropMode] = useState(() => {
+    const isPaddy = (farmProfile.crop || "").toLowerCase().includes("paddy") || (farmProfile.crop || "").toLowerCase().includes("rice");
+    return isPaddy ? "paddy" : "general";
+  });
+
+  useEffect(() => {
+    if (user) {
+      const userCrop = user.crop_type || farmProfile.crop || "Paddy (Rice)";
+      setSelectedScanCrop(userCrop);
+      const isPaddy = userCrop.toLowerCase().includes("paddy") || userCrop.toLowerCase().includes("rice") || user.crop_mode === "paddy";
+      setCropMode(isPaddy ? "paddy" : "general");
+    }
+  }, [user?.crop_type, user?.crop_mode]);
 
   useEffect(() => {
     if (!user) return;
@@ -128,9 +141,16 @@ function AppShell() {
     if (!files.length) { setScanError("Please select or capture at least one leaf image."); return; }
     setScanLoading(true); setScanError(""); setScanPreviewUrl(URL.createObjectURL(files[0]));
     try {
+      const activeCrop = selectedScanCrop || farmProfile.crop || "Paddy (Rice)";
+      const isPaddy = activeCrop.toLowerCase().includes("paddy") || activeCrop.toLowerCase().includes("rice");
+      const activeMode = isPaddy ? "paddy" : "general";
+
       const res = await predictLeafScan({
-        imageFiles: files, language: farmProfile.preferred_language, cropMode,
-        cropName: farmProfile.crop, growthStage: farmProfile.growth_stage,
+        imageFiles: files,
+        language: farmProfile.preferred_language,
+        cropMode: activeMode,
+        cropName: activeCrop,
+        growthStage: farmProfile.growth_stage,
         humidityPercent: weatherAlert?.humidity_percent ?? 78,
       });
       setScanResult(res);
@@ -251,9 +271,22 @@ function AppShell() {
                 outbreaks={outbreaks} onOutbreakAdded={(sig) => setOutbreaks((p) => [sig, ...p])} selectedLanguage={farmProfile.preferred_language} />
             )}
             {page === "scanner" && (
-              <SmartLeafScannerPanel language={farmProfile.preferred_language} onLanguageChange={() => {}}
-                cropMode={cropMode} onCropModeChange={setCropMode}
-                onScan={handleScan} loading={scanLoading} error={scanError} scanResult={scanResult} />
+              <SmartLeafScannerPanel
+                language={farmProfile.preferred_language}
+                onLanguageChange={() => {}}
+                cropMode={cropMode}
+                onCropModeChange={setCropMode}
+                selectedCrop={selectedScanCrop}
+                onSelectedCropChange={(crop) => {
+                  setSelectedScanCrop(crop);
+                  const isPaddy = crop.toLowerCase().includes("paddy") || crop.toLowerCase().includes("rice");
+                  setCropMode(isPaddy ? "paddy" : "general");
+                }}
+                onScan={handleScan}
+                loading={scanLoading}
+                error={scanError}
+                scanResult={scanResult}
+              />
             )}
             {page === "rootcause" && (
               <RootCausePanel scanResult={scanResult} scanPreviewUrl={scanPreviewUrl}
