@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+.env
+backend/.env
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Local storage, datasets & ML weights
+backend/uploads/
+backend/local_data/
+source/
+sources/
+processed/
+*.h5
+*.keras
+*.tflite
+*.db
+.DS_Store

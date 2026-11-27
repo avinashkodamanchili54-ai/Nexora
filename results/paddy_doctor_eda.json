@@ -1,0 +1,52 @@
+{
+  "bacterial_leaf_blight": {
+    "train": 335,
+    "val": 72,
+    "test": 72
+  },
+  "bacterial_leaf_streak": {
+    "train": 266,
+    "val": 57,
+    "test": 57
+  },
+  "bacterial_panicle_blight": {
+    "train": 235,
+    "val": 51,
+    "test": 51
+  },
+  "blast": {
+    "train": 1216,
+    "val": 261,
+    "test": 261
+  },
+  "brown_spot": {
+    "train": 675,
+    "val": 145,
+    "test": 145
+  },
+  "dead_heart": {
+    "train": 1009,
+    "val": 216,
+    "test": 217
+  },
+  "downy_mildew": {
+    "train": 434,
+    "val": 93,
+    "test": 93
+  },
+  "hispa": {
+    "train": 1115,
+    "val": 239,
+    "test": 240
+  },
+  "normal": {
+    "train": 1234,
+    "val": 265,
+    "test": 265
+  },
+  "tungro": {
+    "train": 761,
+    "val": 163,
+    "test": 164
+  }
+}
