@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { LANGUAGES } from "../constants";
+import { API_BASE, LANGUAGES } from "../constants";
 import {
-  API_BASE,
   fetchForecastingReport,
   playRegionalSpeech,
   sendAssistantMessage,
