@@ -26,6 +26,7 @@ export default function RiskRadarPage({
   const [forecastData, setForecastData] = useState(null);
   const [forecastLoading, setForecastLoading] = useState(false);
   const [forecastError, setForecastError] = useState("");
+  const [forecastView, setForecastView] = useState("weather"); // 'weather' or 'climate'
   const [riskTab, setRiskTab] = useState("baseline");
   const [confirmedReports, setConfirmedReports] = useState([]);
 
@@ -207,51 +208,243 @@ export default function RiskRadarPage({
           ) : null}
           {forecastError ? <p className="error-text">{forecastError}</p> : null}
           {forecastData ? (
-            <div className="speech-summary-card" style={{ marginTop: "0.75rem" }}>
-              <div className="section-head" style={{ marginBottom: "0.5rem" }}>
-                <strong>7-Day Weather &amp; 30-Day Climate Forecasting ({forecastData.location})</strong>
-                <span className="pill-badge">{forecastData.source}</span>
+            <div className="speech-summary-card" style={{ marginTop: "0.75rem", background: "var(--card-bg, #1e293b)", borderRadius: "12px", padding: "1.2rem", border: "1px solid var(--border-color, #334155)" }}>
+              {/* Header with Weather vs Climate Switch */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span>🌤️</span> 7-Day Weather &amp; 30-Day Climate Analysis
+                  </h3>
+                  <small className="muted">{forecastData.location} · {farmProfile.crop} ({farmProfile.growth_stage})</small>
+                </div>
+                {/* Switch Button */}
+                <div style={{ display: "inline-flex", background: "rgba(0,0,0,0.3)", padding: "3px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                  <button
+                    type="button"
+                    style={{
+                      padding: "6px 14px",
+                      borderRadius: "6px",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      fontWeight: 600,
+                      background: forecastView === "weather" ? "#10b981" : "transparent",
+                      color: forecastView === "weather" ? "#fff" : "#94a3b8",
+                      transition: "all 0.2s ease"
+                    }}
+                    onClick={() => setForecastView("weather")}
+                  >
+                    ⛅ Weather Forecast (7-Day)
+                  </button>
+                  <button
+                    type="button"
+                    style={{
+                      padding: "6px 14px",
+                      borderRadius: "6px",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      fontWeight: 600,
+                      background: forecastView === "climate" ? "#3b82f6" : "transparent",
+                      color: forecastView === "climate" ? "#fff" : "#94a3b8",
+                      transition: "all 0.2s ease"
+                    }}
+                    onClick={() => setForecastView("climate")}
+                  >
+                    🌍 Climate Trends &amp; Norms
+                  </button>
+                </div>
               </div>
-              <p><strong>AI Climate &amp; Weather Summary:</strong> {forecastData.ai_summary}</p>
-              <p style={{ marginTop: "0.4rem" }}>
-                <strong>Estimated Rainfall Timing:</strong> {forecastData.rainfall_guess}
-              </p>
-              <div className="weather-metrics-grid" style={{ marginTop: "0.75rem" }}>
-                <div className="metric-tile">
-                  <span>30-Day Climate Avg Max</span>
-                  <strong>{forecastData.climate?.avg_max_temp_c}°C</strong>
+
+              {/* Weather App Style Interactive Graph */}
+              {forecastView === "weather" ? (
+                <div style={{ marginBottom: "1.2rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#38bdf8" }}>📈 7-Day Temperature (°C) &amp; Rain Probability (%) Curve</span>
+                    <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>Max Temp (Orange) · Min Temp (Blue) · Rain % (Cyan bars)</span>
+                  </div>
+
+                  {/* SVG Line & Bar Chart */}
+                  <div style={{ width: "100%", overflowX: "auto", background: "rgba(15, 23, 42, 0.6)", borderRadius: "8px", padding: "10px 4px" }}>
+                    <svg viewBox="0 0 700 210" style={{ width: "100%", minWidth: "550px", height: "200px" }}>
+                      <defs>
+                        <linearGradient id="rainBarGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8" />
+                          <stop offset="100%" stopColor="#0284c7" stopOpacity="0.2" />
+                        </linearGradient>
+                      </defs>
+
+                      {/* Grid lines */}
+                      {[40, 80, 120, 160].map((y) => (
+                        <line key={y} x1="30" y1={y} x2="680" y2={y} stroke="rgba(255,255,255,0.07)" strokeDasharray="4 4" />
+                      ))}
+
+                      {/* Render Bars for Rain Probability */}
+                      {forecastData.weekly_forecast?.map((day, idx) => {
+                        const x = 50 + idx * 90;
+                        const barHeight = Math.max(4, (day.rain_prob_pct / 100) * 110);
+                        const y = 170 - barHeight;
+                        return (
+                          <g key={`bar-${idx}`}>
+                            <rect
+                              x={x + 10}
+                              y={y}
+                              width="28"
+                              height={barHeight}
+                              rx="4"
+                              fill="url(#rainBarGrad)"
+                            />
+                            <text x={x + 24} y={y - 6} textAnchor="middle" fill="#38bdf8" fontSize="11" fontWeight="bold">
+                              {day.rain_prob_pct}%
+                            </text>
+                            <text x={x + 24} y="195" textAnchor="middle" fill="#94a3b8" fontSize="11">
+                              {day.date.slice(5)}
+                            </text>
+                          </g>
+                        );
+                      })}
+
+                      {/* Render Max Temp Line */}
+                      {(() => {
+                        const points = forecastData.weekly_forecast?.map((d, i) => {
+                          const x = 50 + i * 90 + 24;
+                          // Scale temp (range 15-45C mapped to y: 140 to 30)
+                          const y = 150 - ((d.temp_max_c - 15) / 30) * 120;
+                          return { x, y, temp: d.temp_max_c };
+                        }) || [];
+
+                        const minPoints = forecastData.weekly_forecast?.map((d, i) => {
+                          const x = 50 + i * 90 + 24;
+                          const y = 150 - ((d.temp_min_c - 15) / 30) * 120;
+                          return { x, y, temp: d.temp_min_c };
+                        }) || [];
+
+                        const maxPath = points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`).join(" ");
+                        const minPath = minPoints.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`).join(" ");
+
+                        return (
+                          <>
+                            {/* Max Temp Line */}
+                            <path d={maxPath} fill="none" stroke="#f97316" strokeWidth="3" strokeLinecap="round" />
+                            {points.map((p, i) => (
+                              <g key={`max-dot-${i}`}>
+                                <circle cx={p.x} cy={p.y} r="4.5" fill="#f97316" stroke="#fff" strokeWidth="1.5" />
+                                <text x={p.x} y={p.y - 8} textAnchor="middle" fill="#fb923c" fontSize="11" fontWeight="bold">
+                                  {p.temp}°
+                                </text>
+                              </g>
+                            ))}
+
+                            {/* Min Temp Line */}
+                            <path d={minPath} fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeDasharray="3 3" strokeLinecap="round" />
+                            {minPoints.map((p, i) => (
+                              <g key={`min-dot-${i}`}>
+                                <circle cx={p.x} cy={p.y} r="3.5" fill="#3b82f6" stroke="#fff" strokeWidth="1" />
+                                <text x={p.x} y={p.y + 16} textAnchor="middle" fill="#93c5fd" fontSize="10">
+                                  {p.temp}°
+                                </text>
+                              </g>
+                            ))}
+                          </>
+                        );
+                      })()}
+                    </svg>
+                  </div>
                 </div>
-                <div className="metric-tile">
-                  <span>Temp Anomaly (7d vs 30d)</span>
-                  <strong>{forecastData.climate?.temp_anomaly_c > 0 ? `+${forecastData.climate.temp_anomaly_c}` : forecastData.climate?.temp_anomaly_c}°C</strong>
+              ) : (
+                /* Climate View */
+                <div style={{ marginBottom: "1.2rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#60a5fa" }}>📊 30-Day Climate Baseline vs 7-Day Forecast Comparison</span>
+                  </div>
+                  <div className="weather-metrics-grid" style={{ marginTop: "0.5rem" }}>
+                    <div className="metric-tile" style={{ borderLeft: "4px solid #3b82f6" }}>
+                      <span>30-Day Historical Avg Max</span>
+                      <strong>{forecastData.climate?.avg_max_temp_c}°C</strong>
+                      <small className="muted">District baseline norm</small>
+                    </div>
+                    <div className="metric-tile" style={{ borderLeft: "4px solid #f97316" }}>
+                      <span>Temperature Anomaly</span>
+                      <strong>{forecastData.climate?.temp_anomaly_c > 0 ? `+${forecastData.climate.temp_anomaly_c}` : forecastData.climate?.temp_anomaly_c}°C</strong>
+                      <small className="muted">Difference from 30-day normal</small>
+                    </div>
+                    <div className="metric-tile" style={{ borderLeft: "4px solid #06b6d4" }}>
+                      <span>30-Day Cumulative Rain</span>
+                      <strong>{forecastData.climate?.total_rain_mm} mm</strong>
+                      <small className="muted">Past month precipitation</small>
+                    </div>
+                    <div className="metric-tile" style={{ borderLeft: "4px solid #10b981" }}>
+                      <span>7-Day Expected Rain</span>
+                      <strong>{forecastData.climate?.week_total_rain_mm} mm</strong>
+                      <small className="muted">Upcoming 7-day projection</small>
+                    </div>
+                  </div>
                 </div>
-                <div className="metric-tile">
-                  <span>30-Day Climate Rain</span>
-                  <strong>{forecastData.climate?.total_rain_mm} mm</strong>
-                </div>
-                <div className="metric-tile">
-                  <span>7-Day Expected Rain</span>
-                  <strong>{forecastData.climate?.week_total_rain_mm} mm</strong>
+              )}
+
+              {/* Crop-Specific Risk & Weather Factors */}
+              <div style={{ background: "rgba(0,0,0,0.25)", borderRadius: "8px", padding: "12px", marginBottom: "1rem" }}>
+                <h4 style={{ margin: "0 0 8px 0", color: "#e2e8f0", fontSize: "0.95rem" }}>
+                  🌾 Crop Weather Sensitivity Factors for {farmProfile.crop} ({farmProfile.growth_stage}):
+                </h4>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px", fontSize: "0.85rem" }}>
+                  <div style={{ background: "rgba(255,255,255,0.03)", padding: "8px 10px", borderRadius: "6px" }}>
+                    <span style={{ color: "#94a3b8" }}>🌧️ Rainfall Timing: </span>
+                    <strong style={{ color: "#38bdf8" }}>{forecastData.rainfall_guess}</strong>
+                  </div>
+                  <div style={{ background: "rgba(255,255,255,0.03)", padding: "8px 10px", borderRadius: "6px" }}>
+                    <span style={{ color: "#94a3b8" }}>🌬️ Spore Dispersal Risk: </span>
+                    <strong style={{ color: forecastData.weekly_forecast?.some(d => d.wind_kmh > 15) ? "#f59e0b" : "#10b981" }}>
+                      {forecastData.weekly_forecast?.some(d => d.wind_kmh > 15) ? "Moderate (Wind > 15 km/h)" : "Low Wind Spread"}
+                    </strong>
+                  </div>
+                  <div style={{ background: "rgba(255,255,255,0.03)", padding: "8px 10px", borderRadius: "6px" }}>
+                    <span style={{ color: "#94a3b8" }}>💧 Fungal Moisture Window: </span>
+                    <strong style={{ color: forecastData.climate?.week_total_rain_mm > 10 ? "#ef4444" : "#10b981" }}>
+                      {forecastData.climate?.week_total_rain_mm > 10 ? "High Leaf Wetness Danger" : "Favorable / Safe"}
+                    </strong>
+                  </div>
+                  <div style={{ background: "rgba(255,255,255,0.03)", padding: "8px 10px", borderRadius: "6px" }}>
+                    <span style={{ color: "#94a3b8" }}>🛡️ Spray Recommendation: </span>
+                    <strong style={{ color: forecastData.rainfall_guess.toLowerCase().includes("no significant") ? "#10b981" : "#f59e0b" }}>
+                      {forecastData.rainfall_guess.toLowerCase().includes("no significant") ? "Clear to Spray Today" : "Delay Spray (Rain Ahead)"}
+                    </strong>
+                  </div>
                 </div>
               </div>
+
+              {/* AI Weather Summary */}
+              <div style={{ borderLeft: "3px solid #10b981", paddingLeft: "10px", margin: "10px 0" }}>
+                <p style={{ margin: 0, fontSize: "0.9rem", color: "#f1f5f9" }}>
+                  <strong>🤖 AI Climate &amp; Weather Summary:</strong> {forecastData.ai_summary}
+                </p>
+              </div>
+
+              {/* Identified Risks */}
               {forecastData.identified_risks?.length ? (
-                <div style={{ marginTop: "0.75rem" }}>
-                  <strong>Identified Risks:</strong>
-                  <ul style={{ margin: "0.25rem 0 0 1.2rem" }}>
+                <div style={{ marginTop: "0.75rem", background: "rgba(239, 68, 68, 0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: "8px", padding: "10px" }}>
+                  <strong style={{ color: "#fca5a5", fontSize: "0.9rem" }}>⚠️ Identified Weather &amp; Crop Threats:</strong>
+                  <ul style={{ margin: "0.35rem 0 0 1.2rem", fontSize: "0.85rem", color: "#fecaca" }}>
                     {forecastData.identified_risks.map((r, i) => (
                       <li key={i}>{r}</li>
                     ))}
                   </ul>
                 </div>
               ) : null}
-              <div className="spray-grid" style={{ marginTop: "0.75rem" }}>
+
+              {/* 7-Day Day-by-Day Cards */}
+              <div className="spray-grid" style={{ marginTop: "1rem" }}>
                 {forecastData.weekly_forecast?.map((day) => (
-                  <div key={day.date} className="spray-card">
-                    <strong>{day.date}</strong>
-                    <span>{day.temp_min_c}°C – {day.temp_max_c}°C</span>
-                    <span>Rain: {day.rain_mm} mm ({day.rain_prob_pct}%)</span>
-                    <span>Wind: {day.wind_kmh} km/h</span>
-                    <span className="sev-badge sev-mod" style={{ marginTop: "0.25rem" }}>{day.risk}</span>
+                  <div key={day.date} className="spray-card" style={{ textAlign: "center" }}>
+                    <strong style={{ display: "block", fontSize: "0.85rem" }}>{day.date}</strong>
+                    <div style={{ margin: "4px 0", fontSize: "1.05rem", fontWeight: 700, color: "#fb923c" }}>
+                      {day.temp_max_c}° <span style={{ fontSize: "0.85rem", color: "#93c5fd", fontWeight: 400 }}>/ {day.temp_min_c}°</span>
+                    </div>
+                    <div style={{ fontSize: "0.8rem", color: "#38bdf8" }}>🌧️ {day.rain_prob_pct}% ({day.rain_mm}mm)</div>
+                    <div style={{ fontSize: "0.8rem", color: "#94a3b8" }}>💨 {day.wind_kmh} km/h</div>
+                    <span className={`sev-badge ${day.risk.toLowerCase().includes("high") ? "sev-high" : day.risk.toLowerCase().includes("mod") ? "sev-mod" : "sev-none"}`} style={{ marginTop: "0.35rem", display: "inline-block", fontSize: "0.75rem" }}>
+                      {day.risk}
+                    </span>
                   </div>
                 ))}
               </div>

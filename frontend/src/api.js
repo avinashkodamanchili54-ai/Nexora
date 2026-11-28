@@ -127,13 +127,18 @@ export async function fetchWeatherAlert({ location, lat, lon, crop, growthStage 
 }
 
 export async function fetchForecastingReport({ location, lat, lon, crop, growthStage }) {
-  const q = new URLSearchParams({
-    location,
-    lat: String(lat),
-    lon: String(lon),
-    crop,
-    growth_stage: growthStage,
-  });
+  const params = {
+    location: location || "Guntur, Andhra Pradesh",
+    crop: crop || "Paddy (Rice)",
+    growth_stage: growthStage || "Vegetative / Tillering",
+  };
+  if (lat !== undefined && lat !== null && !isNaN(Number(lat))) {
+    params.lat = String(lat);
+  }
+  if (lon !== undefined && lon !== null && !isNaN(Number(lon))) {
+    params.lon = String(lon);
+  }
+  const q = new URLSearchParams(params);
   const res = await fetch(`${API_BASE}/api/weather/forecasting?${q.toString()}`);
   return parseResponse(res);
 }
