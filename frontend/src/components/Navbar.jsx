@@ -46,12 +46,13 @@ const STEP_ICONS = {
 
 const SHORT_LANG = { en: "EN", te: "తె", hi: "हि", ta: "த", kn: "ಕ" };
 
-export default function Navbar({ activeTab, onSelectTab, models, onOpenAlerts, onOpenProfile }) {
+export default function Navbar({ activeTab, onSelectTab, models, currentLang, onSelectLanguage, onOpenAlerts, onOpenProfile }) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { unreadCount } = useAlerts();
   const readyCount = models.filter((m) => m.loaded).length;
   const initials = (user?.name || "F").slice(0, 2).toUpperCase();
+  const activeLanguage = currentLang || i18n.language || "en";
 
   return (
     <header className="hero-header">
@@ -82,8 +83,15 @@ export default function Navbar({ activeTab, onSelectTab, models, onOpenAlerts, o
           <div className="lang-pill-group" role="group" aria-label="Language Switch">
             {LANGUAGES.map((l) => (
               <button key={l.code} type="button"
-                className={`lang-pill-btn ${i18n.language === l.code ? "active" : ""}`}
-                onClick={() => { i18n.changeLanguage(l.code); localStorage.setItem("nexora_lang", l.code); }}
+                className={`lang-pill-btn ${activeLanguage === l.code ? "active" : ""}`}
+                onClick={() => {
+                  if (onSelectLanguage) {
+                    onSelectLanguage(l.code);
+                  } else {
+                    i18n.changeLanguage(l.code);
+                    localStorage.setItem("nexora_lang", l.code);
+                  }
+                }}
                 title={l.label}
               >
                 {SHORT_LANG[l.code]}

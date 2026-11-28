@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { API_BASE, LANGUAGES } from "../constants";
+import { API_BASE, LANGUAGES, UI_STRINGS } from "../constants";
 import {
   fetchForecastingReport,
   playRegionalSpeech,
@@ -16,6 +16,8 @@ export default function AssistantChatPanel({
   initialLang,
 }) {
   const [chatLang, setChatLang] = useState(initialLang || "te");
+
+  const chatT = (UI_STRINGS[chatLang] || UI_STRINGS.en).chatPage || UI_STRINGS.en.chatPage;
 
   useEffect(() => {
     if (initialLang) {
@@ -210,7 +212,7 @@ export default function AssistantChatPanel({
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask in Telugu, Hindi, Tamil, Kannada, or English..."
+          placeholder={chatT.placeholder}
         />
         <input
           ref={fileInputRef}

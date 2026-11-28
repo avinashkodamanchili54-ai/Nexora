@@ -75,6 +75,7 @@ export default function SmartLeafScannerPanel({
   const [qaHistory, setQaHistory] = useState([]);
 
   const strings = UI_STRINGS[language] || UI_STRINGS.en;
+  const scannerT = strings.scannerPage || UI_STRINGS.en.scannerPage;
 
   const selectFiles = (fileList) => {
     const valid = Array.from(fileList || [])
@@ -89,9 +90,9 @@ export default function SmartLeafScannerPanel({
     <section className="panel-card scanner-shell">
       <div className="section-head">
         <div>
-          <h2>Multi-Frame Smart Leaf Scanner</h2>
+          <h2>{scannerT.title}</h2>
           <p className="muted">
-            Upload 1–3 angles of the affected leaf. SmartScan checks foliage presence, blur, and lighting, then picks the sharpest frame.
+            {scannerT.subtitle}
           </p>
         </div>
         <button
@@ -173,6 +174,54 @@ export default function SmartLeafScannerPanel({
         </span>
       </div>
 
+      {/* Hidden Inputs for Camera vs File Upload */}
+      <input
+        id="camera-capture-input"
+        type="file"
+        accept="image/*"
+        capture="environment"
+        style={{ display: "none" }}
+        onChange={(e) => selectFiles(e.target.files)}
+      />
+      <input
+        id="file-browse-input"
+        type="file"
+        accept="image/*"
+        multiple
+        style={{ display: "none" }}
+        onChange={(e) => selectFiles(e.target.files)}
+      />
+
+      {/* Action Buttons: Camera vs File Browse */}
+      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "12px" }}>
+        <button
+          type="button"
+          className="primary-btn"
+          style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: "180px", justifyContent: "center" }}
+          onClick={() => document.getElementById("camera-capture-input")?.click()}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+            <circle cx="12" cy="13" r="4" />
+          </svg>
+          <strong>{scannerT.takePhoto}</strong>
+        </button>
+
+        <button
+          type="button"
+          className="secondary-btn"
+          style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: "180px", justifyContent: "center" }}
+          onClick={() => document.getElementById("file-browse-input")?.click()}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          <span>{scannerT.uploadFile}</span>
+        </button>
+      </div>
+
       <div
         className={`dropzone ${dragActive ? "drag-active" : ""}`}
         onDragOver={(e) => {
@@ -191,7 +240,6 @@ export default function SmartLeafScannerPanel({
           type="file"
           accept="image/*"
           multiple
-          capture="environment"
           onChange={(e) => selectFiles(e.target.files)}
         />
 
@@ -206,9 +254,18 @@ export default function SmartLeafScannerPanel({
               <span className="file-name">
                 {imageFiles.length} frame(s) selected ({imageFiles.map((f) => f.name).join(", ")})
               </span>
-              <label htmlFor="smart-leaf-upload" className="secondary-btn">
-                Retake / Choose up to 3 Photos
-              </label>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button
+                  type="button"
+                  className="secondary-btn"
+                  onClick={() => document.getElementById("camera-capture-input")?.click()}
+                >
+                  📷 {scannerT.takePhoto}
+                </button>
+                <label htmlFor="smart-leaf-upload" className="secondary-btn">
+                  📁 {scannerT.retake}
+                </label>
+              </div>
             </div>
           </div>
         ) : (
@@ -219,7 +276,7 @@ export default function SmartLeafScannerPanel({
                 <circle cx="12" cy="13" r="4" />
               </svg>
             </div>
-            <strong>Tap to Capture or Upload 1–3 Leaf Photos</strong>
+            <strong>{scannerT.tapPrompt}</strong>
             <span>Multi-frame SmartScan automatically picks the clearest daylight photo</span>
           </label>
         )}

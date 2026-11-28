@@ -37,8 +37,25 @@ function getPageFromHash() {
 function AppShell() {
   const { user, loading, logout } = useAuth();
   const { i18n } = useTranslation();
+  const [currentLang, setCurrentLang] = useState(() => localStorage.getItem("nexora_lang") || user?.preferred_language || "en");
   const [page, setPageState] = useState(getPageFromHash);
   const [alertsOpen, setAlertsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleLanguageChanged = (lng) => {
+      setCurrentLang(lng);
+    };
+    i18n.on("languageChanged", handleLanguageChanged);
+    return () => {
+      i18n.off("languageChanged", handleLanguageChanged);
+    };
+  }, [i18n]);
+
+  const handleLanguageSelect = (code) => {
+    i18n.changeLanguage(code);
+    localStorage.setItem("nexora_lang", code);
+    setCurrentLang(code);
+  };
 
   const setPage = (p) => {
     window.location.hash = `#/${p}`;
@@ -67,7 +84,7 @@ function AppShell() {
     farmer_id: user?.user_id || "local-01",
     name: user?.name || "Farmer",
     phone: user?.phone || "",
-    preferred_language: user?.preferred_language || "en",
+    preferred_language: currentLang || user?.preferred_language || "en",
     location: user?.farm_profile?.location || "India",
     crop: user?.crop_type || "Paddy (Rice)",
     variety: user?.farm_profile?.variety || "",
@@ -213,6 +230,8 @@ function AppShell() {
         activeTab={appTab}
         onSelectTab={setPage}
         models={models}
+        currentLang={currentLang}
+        onSelectLanguage={handleLanguageSelect}
         onOpenAlerts={() => setAlertsOpen((v) => !v)}
         onOpenProfile={() => setPage("profile")}
       />
@@ -264,16 +283,16 @@ function AppShell() {
               <HomeDashboard onNavigate={setPage} onOpenAlerts={() => setAlertsOpen(true)} />
             )}
             {page === "farm" && (
-              <FarmSatellitePage farmProfile={farmProfile} onFarmUpdated={handleFarmUpdated} uiLanguage={farmProfile.preferred_language} />
+              <FarmSatellitePage farmProfile={farmProfile} onFarmUpdated={handleFarmUpdated} uiLanguage={currentLang} />
             )}
             {page === "radar" && (
               <RiskRadarPage farmProfile={farmProfile} weatherAlert={weatherAlert} regionalResource={regionalResource}
-                outbreaks={outbreaks} onOutbreakAdded={(sig) => setOutbreaks((p) => [sig, ...p])} selectedLanguage={farmProfile.preferred_language} />
+                outbreaks={outbreaks} onOutbreakAdded={(sig) => setOutbreaks((p) => [sig, ...p])} selectedLanguage={currentLang} />
             )}
             {page === "scanner" && (
               <SmartLeafScannerPanel
-                language={farmProfile.preferred_language}
-                onLanguageChange={() => {}}
+                language={currentLang}
+                onLanguageChange={handleLanguageSelect}
                 cropMode={cropMode}
                 onCropModeChange={setCropMode}
                 selectedCrop={selectedScanCrop}
@@ -290,12 +309,12 @@ function AppShell() {
             )}
             {page === "rootcause" && (
               <RootCausePanel scanResult={scanResult} scanPreviewUrl={scanPreviewUrl}
-                regionalResource={regionalResource} selectedLanguage={farmProfile.preferred_language}
+                regionalResource={regionalResource} selectedLanguage={currentLang}
                 onRefine={handleRefine} refining={refining} onAskAssistant={() => setPage("assistant")} />
             )}
             {page === "assistant" && (
               <AssistantChatPanel farmProfile={farmProfile} latestDiagnosis={scanResult?.disease_name}
-                initialLang={farmProfile.preferred_language} />
+                initialLang={currentLang} />
             )}
             {page === "history" && (
               <CropHistoryPanel history={history} models={models} onHistoryUpdated={handleHistoryUpdated} onClear={handleClearHistory} />

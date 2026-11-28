@@ -22,8 +22,9 @@ function computeAcres(points) {
 }
 
 export default function FarmSatellitePage({
-  farmProfile,
+  farmProfile = {},
   onFarmUpdated,
+  onSaveFarm,
   uiLanguage,
 }) {
   const mapRef = useRef(null);
@@ -42,17 +43,17 @@ export default function FarmSatellitePage({
   const [searching, setSearching] = useState(false);
   const [geoStatus, setGeoStatus] = useState("");
 
-  const [boundary, setBoundary] = useState(farmProfile.boundary_coords || []);
-  const [name, setName] = useState(farmProfile.name);
-  const [phone, setPhone] = useState(farmProfile.phone);
-  const [location, setLocation] = useState(farmProfile.location);
-  const [crop, setCrop] = useState(farmProfile.crop);
-  const [variety, setVariety] = useState(farmProfile.variety);
-  const [acreage, setAcreage] = useState(farmProfile.acreage);
-  const [sowingDate, setSowingDate] = useState(farmProfile.sowing_date);
+  const [boundary, setBoundary] = useState(farmProfile.boundary_coords || farmProfile.polygon || []);
+  const [name, setName] = useState(farmProfile.name || "");
+  const [phone, setPhone] = useState(farmProfile.phone || "");
+  const [location, setLocation] = useState(farmProfile.location || "");
+  const [crop, setCrop] = useState(farmProfile.crop || "Paddy (Rice)");
+  const [variety, setVariety] = useState(farmProfile.variety || "");
+  const [acreage, setAcreage] = useState(farmProfile.acreage || farmProfile.acres || 1);
+  const [sowingDate, setSowingDate] = useState(farmProfile.sowing_date || "");
   const [center, setCenter] = useState({
-    lat: farmProfile.center_lat,
-    lon: farmProfile.center_lon,
+    lat: Number(farmProfile.center_lat ?? farmProfile.lat ?? 20.5937),
+    lon: Number(farmProfile.center_lon ?? farmProfile.lon ?? 78.9629),
   });
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
@@ -313,7 +314,8 @@ export default function FarmSatellitePage({
         center_lon: center.lon,
         boundary_coords: boundary,
       });
-      onFarmUpdated(profile);
+      if (onFarmUpdated) onFarmUpdated(profile);
+      if (onSaveFarm) onSaveFarm(profile);
       setSaveMsg(
         `Saved ${profile.crop} (${profile.acreage} acres) · Growth Stage: ${profile.growth_stage}`
       );

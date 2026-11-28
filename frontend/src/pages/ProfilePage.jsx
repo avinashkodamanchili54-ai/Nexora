@@ -34,7 +34,9 @@ export default function ProfilePage({ onNavigate }) {
   // Init Leaflet map
   useEffect(() => {
     if (!mapRef.current || leafletMapRef.current) return;
-    import("leaflet").then((L) => {
+    import("leaflet").then((mod) => {
+      const L = mod.default || mod;
+      if (!mapRef.current || leafletMapRef.current) return;
       const map = L.map(mapRef.current).setView([mapCenter.lat, mapCenter.lon], 13);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap contributors",
