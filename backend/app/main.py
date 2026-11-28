@@ -15,6 +15,7 @@ from app.routers import (
     predict,
     voice,
     weather,
+    permapeople,
 )
 
 app = FastAPI(
@@ -77,6 +78,7 @@ app.include_router(weather.router)
 app.include_router(farmers.router)
 app.include_router(history.router)
 app.include_router(models_info.router)
+app.include_router(permapeople.router)
 
 
 @app.get("/health")

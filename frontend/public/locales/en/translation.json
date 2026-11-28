@@ -1,0 +1,54 @@
+{
+  "tagline": "Predict the risk. Investigate the cause. Explain the evidence. Guide the farmer.",
+  "tabs": {
+    "home": "Home",
+    "farm": "1. Farm & Satellite",
+    "radar": "2. Risk Radar",
+    "scanner": "3. Leaf Scanner",
+    "rootcause": "4. RootCause AI",
+    "assistant": "5. Sakhi Chat",
+    "history": "6. Crop History"
+  },
+  "scanCta": "Run SmartScan & Investigate Cause",
+  "saveFarm": "Save Farm & Update Risk Radar",
+  "nav": {
+    "profile": "My Profile",
+    "alerts": "Alerts",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "identifier": "Phone Number or Email",
+    "password": "Password",
+    "name": "Full Name",
+    "language": "Language",
+    "cropType": "Crop Type",
+    "loginCta": "Login to Krishi Sakhi",
+    "registerCta": "Create Farmer Account",
+    "noAccount": "New farmer? Create account →",
+    "hasAccount": "Already registered? Login →"
+  },
+  "profile": {
+    "title": "My Farm Profile",
+    "save": "Save Profile",
+    "location": "Farm Location",
+    "useMyLocation": "Use My Location"
+  },
+  "alerts": {
+    "title": "Farm Alerts",
+    "noAlerts": "No active alerts. Your crops look safe!",
+    "markRead": "Mark all read"
+  },
+  "home": {
+    "welcome": "Welcome",
+    "scan": "Scan Crop",
+    "radar": "Risk Radar",
+    "chat": "Sakhi Chat",
+    "history": "Crop History",
+    "weather": "Weather & Alerts",
+    "library": "Disease Library"
+  }
+}

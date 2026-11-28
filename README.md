@@ -12,8 +12,9 @@
 
 1. [Problem Statement & Objectives](#problem-statement--objectives)
 2. [Core Platform Modules](#core-platform-modules)
-3. [Technology Stack](#technology-stack)
-4. [System Architecture](#system-architecture)
+3. [User Guide & Documentation](#user-guide--documentation)
+4. [Technology Stack](#technology-stack)
+5. [System Architecture](#system-architecture)
 5. [UML Diagrams](#uml-diagrams)
 6. [Project File Structure](#project-file-structure)
 7. [Model Choice: Why MobileNetV2 & Transfer Learning](#model-choice-why-mobilenetv2--transfer-learning)
@@ -48,8 +49,18 @@ Farmers face difficulties in identifying crop diseases and selecting appropriate
 | **3** | **Multi-Frame Smart Leaf Scanner** | Upload 1–3 leaf angles, **foliage presence gate** (`is_leaf_likely`), **blur/brightness/resolution quality check**, automatic best-frame selection, and **AI Lesion Attention Heatmap**. |
 | **4** | **RootCause Investigation Engine** | Generates multiple hypotheses (Disease, Nutrient, Pest), compares **supporting vs. conflicting evidence**, identifies missing info, asks **dynamic follow-up questions**, and flags uncertainty for KVK expert verification. |
 | **5** | **Explainable Diagnosis & Action Plan** | Plain-language explanation (enriched by Gemini LLM), safe treatment steps only when justified, and next-inspection schedule. |
-| **6** | **Multilingual Krishi Sakhi Voice & Chat** | Context-aware **Gemini Free Tier LLM** chatbot + **`edge-tts`** neural regional speech output + **Gemini Audio STT** across **te, hi, ta, kn, en**. |
+| **6** | **Multilingual Krishi Sakhi Voice & Chat** | Context-aware **Gemini Free Tier LLM** chatbot + **`edge-tts`** neural regional speech output + **Gemini Audio STT** across **te, hi, ta, kn, en** with automatic start-of-session 7-day weather & climate risk injection. |
 | **7** | **Crop Health History & Follow-up** | Local + offline (`localStorage`) scan history, before/after comparison, and KVK expert verification status. |
+| **8** | **Companion Planting & Permapeople Ecological Guidance** | Open-source **Permapeople API** integration for identifying beneficial ("good") companion plants (pest repellents, nitrogen fixers) vs. harmful ("bad") competitor species. |
+
+---
+
+## User Guide & Documentation
+
+A complete, beginner-friendly manual covering each screen, workflow, and FAQ is available in the project documentation:
+👉 **[Read the Full User Guide (USER_GUIDE.md)](./USER_GUIDE.md)**
+
+---
 
 ---
 

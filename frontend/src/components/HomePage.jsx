@@ -1,44 +1,48 @@
-export default function HomePage({ onNavigate, farmProfile, weatherAlert, models }) {
-  const readyModels = models.filter((m) => m.loaded).length;
+import { useTranslation } from "react-i18next";
 
+import { useTranslation } from "react-i18next";
+
+export default function HomePage({ onNavigate, farmProfile, weatherAlert, models }) {
+  const { t } = useTranslation();
   const modules = [
     {
       id: "farm",
-      title: "1. Farm & Satellite Selector",
-      desc: "Search any city/village, use Live GPS, and outline your farm boundary on Esri Satellite imagery.",
-      cta: "Open Satellite Map",
+      title: t("homePage.modules.farm.title"),
+      desc: t("homePage.modules.farm.desc"),
+      cta: t("homePage.modules.farm.cta"),
     },
     {
       id: "radar",
-      title: "2. Field Risk Radar",
-      desc: "Live Open-Meteo weather, crop-stage threat probabilities, 5-day safe spray window, and KVK helpline.",
-      cta: "View Risk Radar",
+      title: t("homePage.modules.radar.title"),
+      desc: t("homePage.modules.radar.desc"),
+      cta: t("homePage.modules.radar.cta"),
     },
     {
       id: "scanner",
-      title: "3. Multi-Frame Smart Leaf Scanner",
-      desc: "Upload 1–3 leaf photos with automatic foliage, blur, and lighting checks + MobileNetV2 diagnosis.",
-      cta: "Scan Crop Leaf",
+      title: t("homePage.modules.scanner.title"),
+      desc: t("homePage.modules.scanner.desc"),
+      cta: t("homePage.modules.scanner.cta"),
     },
     {
       id: "rootcause",
-      title: "4. RootCause Investigation AI",
-      desc: "Compare Disease vs. Nutrient vs. Pest evidence, answer quick checks, and get IPM-safe dosages.",
-      cta: "Open RootCause AI",
+      title: t("homePage.modules.rootcause.title"),
+      desc: t("homePage.modules.rootcause.desc"),
+      cta: t("homePage.modules.rootcause.cta"),
     },
     {
       id: "assistant",
-      title: "5. Krishi Sakhi Voice & Chat",
-      desc: "Ask questions in Telugu, Hindi, Tamil, Kannada, or English with Gemini LLM + neural voice.",
-      cta: "Talk to Sakhi AI",
+      title: t("homePage.modules.assistant.title"),
+      desc: t("homePage.modules.assistant.desc"),
+      cta: t("homePage.modules.assistant.cta"),
     },
     {
       id: "history",
-      title: "6. Crop Health History",
-      desc: "Track before/after scans, view AI model accuracies, and mark KVK expert verification.",
-      cta: "View History",
+      title: t("homePage.modules.history.title"),
+      desc: t("homePage.modules.history.desc"),
+      cta: t("homePage.modules.history.cta"),
     },
   ];
+const readyModels = models.filter((m) => m.loaded).length;
 
   return (
     <div className="stack-layout">
