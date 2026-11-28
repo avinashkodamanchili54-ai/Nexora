@@ -40,6 +40,19 @@ def get_weather_alerts(
     )
 
 
+@router.get("/forecasting")
+def get_weather_and_climate_forecasting(
+    location: str = Query("Guntur, Andhra Pradesh"),
+    lat: Optional[float] = Query(None, ge=-90.0, le=90.0),
+    lon: Optional[float] = Query(None, ge=-180.0, le=180.0),
+    crop: str = Query("Paddy (Rice)"),
+    growth_stage: str = Query("Vegetative / Tillering"),
+):
+    return weather_service.get_forecasting(
+        location=location, lat=lat, lon=lon, crop=crop, growth_stage=growth_stage
+    )
+
+
 @router.get("/outbreaks", response_model=List[OutbreakSignal])
 def list_outbreaks():
     return [OutbreakSignal(**o) for o in _load_outbreaks()]

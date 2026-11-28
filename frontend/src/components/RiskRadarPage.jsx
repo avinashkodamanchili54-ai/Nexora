@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
+  fetchForecastingReport,
   playRegionalSpeech,
   reportOutbreakSignal,
   sendAssistantMessage,
@@ -21,6 +22,28 @@ export default function RiskRadarPage({
   const [outbreakText, setOutbreakText] = useState("");
   const [summaryText, setSummaryText] = useState("");
   const [summaryLoading, setSummaryLoading] = useState(false);
+  const [forecastData, setForecastData] = useState(null);
+  const [forecastLoading, setForecastLoading] = useState(false);
+  const [forecastError, setForecastError] = useState("");
+
+  const handleLoadForecasting = async () => {
+    setForecastLoading(true);
+    setForecastError("");
+    try {
+      const data = await fetchForecastingReport({
+        location: farmProfile.location,
+        lat: farmProfile.lat,
+        lon: farmProfile.lon,
+        crop: farmProfile.crop,
+        growthStage: farmProfile.growth_stage,
+      });
+      setForecastData(data);
+    } catch (err) {
+      setForecastError(err.message || "Failed to load forecasting report.");
+    } finally {
+      setForecastLoading(false);
+    }
+  };
   const [speaking, setSpeaking] = useState(false);
   const [recording, setRecording] = useState(false);
   const mediaRecorderRef = useRef(null);
@@ -138,6 +161,14 @@ export default function RiskRadarPage({
             >
               {summaryLoading ? "Generating Gemini Summary..." : "Gemini Risk Summary"}
             </button>
+            <button
+              type="button"
+              className="secondary-btn"
+              disabled={forecastLoading}
+              onClick={handleLoadForecasting}
+            >
+              {forecastLoading ? "Loading 7-Day & Climate..." : "Forecasting (7-Day & Climate)"}
+            </button>
             <button type="button" className="voice-btn" onClick={toggleSpeakSummary}>
               {speaking ? "Stop Audio" : "Listen Summary (TTS)"}
             </button>
@@ -159,6 +190,58 @@ export default function RiskRadarPage({
           {summaryText ? (
             <div className="speech-summary-card chat-markdown">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{summaryText}</ReactMarkdown>
+            </div>
+          ) : null}
+          {forecastError ? <p className="error-text">{forecastError}</p> : null}
+          {forecastData ? (
+            <div className="speech-summary-card" style={{ marginTop: "0.75rem" }}>
+              <div className="section-head" style={{ marginBottom: "0.5rem" }}>
+                <strong>7-Day Weather &amp; 30-Day Climate Forecasting ({forecastData.location})</strong>
+                <span className="pill-badge">{forecastData.source}</span>
+              </div>
+              <p><strong>AI Climate &amp; Weather Summary:</strong> {forecastData.ai_summary}</p>
+              <p style={{ marginTop: "0.4rem" }}>
+                <strong>Estimated Rainfall Timing:</strong> {forecastData.rainfall_guess}
+              </p>
+              <div className="weather-metrics-grid" style={{ marginTop: "0.75rem" }}>
+                <div className="metric-tile">
+                  <span>30-Day Climate Avg Max</span>
+                  <strong>{forecastData.climate?.avg_max_temp_c}°C</strong>
+                </div>
+                <div className="metric-tile">
+                  <span>Temp Anomaly (7d vs 30d)</span>
+                  <strong>{forecastData.climate?.temp_anomaly_c > 0 ? `+${forecastData.climate.temp_anomaly_c}` : forecastData.climate?.temp_anomaly_c}°C</strong>
+                </div>
+                <div className="metric-tile">
+                  <span>30-Day Climate Rain</span>
+                  <strong>{forecastData.climate?.total_rain_mm} mm</strong>
+                </div>
+                <div className="metric-tile">
+                  <span>7-Day Expected Rain</span>
+                  <strong>{forecastData.climate?.week_total_rain_mm} mm</strong>
+                </div>
+              </div>
+              {forecastData.identified_risks?.length ? (
+                <div style={{ marginTop: "0.75rem" }}>
+                  <strong>Identified Risks:</strong>
+                  <ul style={{ margin: "0.25rem 0 0 1.2rem" }}>
+                    {forecastData.identified_risks.map((r, i) => (
+                      <li key={i}>{r}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              <div className="spray-grid" style={{ marginTop: "0.75rem" }}>
+                {forecastData.weekly_forecast?.map((day) => (
+                  <div key={day.date} className="spray-card">
+                    <strong>{day.date}</strong>
+                    <span>{day.temp_min_c}°C – {day.temp_max_c}°C</span>
+                    <span>Rain: {day.rain_mm} mm ({day.rain_prob_pct}%)</span>
+                    <span>Wind: {day.wind_kmh} km/h</span>
+                    <span className="sev-badge sev-mod" style={{ marginTop: "0.25rem" }}>{day.risk}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : null}
         </div>

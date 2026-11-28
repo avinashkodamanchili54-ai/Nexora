@@ -126,6 +126,18 @@ export async function fetchWeatherAlert({ location, lat, lon, crop, growthStage 
   return parseResponse(res);
 }
 
+export async function fetchForecastingReport({ location, lat, lon, crop, growthStage }) {
+  const q = new URLSearchParams({
+    location,
+    lat: String(lat),
+    lon: String(lon),
+    crop,
+    growth_stage: growthStage,
+  });
+  const res = await fetch(`${API_BASE}/api/weather/forecasting?${q.toString()}`);
+  return parseResponse(res);
+}
+
 export async function reportOutbreakSignal(payload) {
   const res = await fetch(`${API_BASE}/api/weather/outbreaks`, {
     method: "POST",
