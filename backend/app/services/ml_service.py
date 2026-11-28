@@ -1,3 +1,4 @@
+from collections import Counter
 import hashlib
 import io
 import json
@@ -89,6 +90,33 @@ class MLService:
                 matching.append(idx)
         return matching if matching else list(range(len(classes)))
 
+    @staticmethod
+    def _predict_paddy_5x_tta(model, img: Image.Image) -> Tuple[int, float]:
+        """Run 5 augmented views in one batch and return (majority_class_idx, mean_confidence)."""
+        import numpy as np  # type: ignore
+
+        w, h = img.size
+        crop_margin_w, crop_margin_h = int(w * 0.075), int(h * 0.075)
+        center_crop = img.crop((crop_margin_w, crop_margin_h, w - crop_margin_w, h - crop_margin_h)).resize((224, 224))
+
+        views = [
+            img,
+            img.transpose(Image.FLIP_LEFT_RIGHT),
+            center_crop,
+            img.rotate(10, resample=Image.BILINEAR),
+            img.rotate(-10, resample=Image.BILINEAR),
+        ]
+        batch = np.stack([np.asarray(v, dtype="float32") for v in views], axis=0)
+        preds = model.predict(batch, verbose=0)  # shape: (5, num_classes)
+
+        votes = [int(np.argmax(p)) for p in preds]
+        mean_probs = np.mean(preds, axis=0)
+        counts = Counter(votes)
+        # Majority vote; break ties by highest mean probability across the 5 views
+        winning_idx = max(counts.keys(), key=lambda c: (counts[c], float(mean_probs[c])))
+        confidence = float(np.clip(mean_probs[winning_idx], 0.0, 1.0))
+        return winning_idx, confidence
+
     def predict_disease(
         self, image_bytes: bytes, crop_mode: str = "paddy", crop_name: str = ""
     ) -> Tuple[str, float, str]:
@@ -113,6 +141,11 @@ class MLService:
 
         if model is not None:
             import numpy as np  # type: ignore
+
+            if model_key == "paddy_doctor":
+                idx, confidence = self._predict_paddy_5x_tta(model, img)
+                label = classes[idx] if idx < len(classes) else classes[0]
+                return label, confidence, f"tensorflow-mobilenetv2 ({model_key}-5x-tta) [P(Disease | {crop_label})]"
 
             arr = np.asarray(img, dtype="float32")
             arr = np.expand_dims(arr, axis=0)
