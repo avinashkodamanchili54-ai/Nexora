@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import FarmSatellitePage from "../components/FarmSatellitePage";
 import { API_BASE, LANGUAGES, CROP_PRESETS } from "../constants";
 import { useAuth } from "../context/AuthContext";
 import i18n from "../i18n";
