@@ -1,0 +1,26 @@
+{
+  "dataset": "Rice (New Dataset)",
+  "n_splits": 5,
+  "classes": [
+    "False Smut",
+    "Bacterial Leaf Blight",
+    "Brown Spot",
+    "Leaf Sheath Blight",
+    "Healthy",
+    "Yellow Stem Borer",
+    "Leaf Folder",
+    "White Stem Borer",
+    "Rice Skipper"
+  ],
+  "fold_accuracies": [
+    0.7582,
+    0.7363,
+    0.8111,
+    0.8111,
+    0.8778
+  ],
+  "mean_accuracy": 0.7989,
+  "std_accuracy": 0.0492,
+  "best_overall_accuracy": 0.8778,
+  "model_path": "/Users/bokkadhanaraju/Documents/Nexora/Nexora/models/trained_models_cv/rice_(new_dataset)_best_cv.pt"
+}

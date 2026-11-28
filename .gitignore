@@ -25,3 +25,4 @@ processed/
 *.db
 .DS_Store
 modelsweb/
+*.pt

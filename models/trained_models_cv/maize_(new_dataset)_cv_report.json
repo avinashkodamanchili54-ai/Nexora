@@ -1,0 +1,25 @@
+{
+  "dataset": "Maize (New Dataset)",
+  "n_splits": 5,
+  "classes": [
+    "Maydis Leaf Blight",
+    "Sorghum Downy Mildew",
+    "Curvularia Leaf Spot",
+    "Turcicum Leaf Blight",
+    "Healthy",
+    "Faw Symptoms",
+    "Fall Armyworm",
+    "Aphid"
+  ],
+  "fold_accuracies": [
+    0.875,
+    0.8375,
+    0.8125,
+    0.8625,
+    0.8
+  ],
+  "mean_accuracy": 0.8375,
+  "std_accuracy": 0.0285,
+  "best_overall_accuracy": 0.875,
+  "model_path": "/Users/bokkadhanaraju/Documents/Nexora/Nexora/models/trained_models_cv/maize_(new_dataset)_best_cv.pt"
+}

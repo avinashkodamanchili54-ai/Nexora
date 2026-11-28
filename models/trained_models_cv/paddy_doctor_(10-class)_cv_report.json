@@ -1,0 +1,27 @@
+{
+  "dataset": "Paddy Doctor (10-Class)",
+  "n_splits": 5,
+  "classes": [
+    "bacterial_leaf_blight",
+    "bacterial_leaf_streak",
+    "bacterial_panicle_blight",
+    "blast",
+    "brown_spot",
+    "dead_heart",
+    "downy_mildew",
+    "hispa",
+    "normal",
+    "tungro"
+  ],
+  "fold_accuracies": [
+    0.695,
+    0.705,
+    0.72,
+    0.725,
+    0.71
+  ],
+  "mean_accuracy": 0.711,
+  "std_accuracy": 0.0107,
+  "best_overall_accuracy": 0.725,
+  "model_path": "/Users/bokkadhanaraju/Documents/Nexora/Nexora/models/trained_models_cv/paddy_doctor_(10-class)_best_cv.pt"
+}
