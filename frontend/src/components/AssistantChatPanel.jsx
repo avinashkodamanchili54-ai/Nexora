@@ -3,6 +3,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LANGUAGES } from "../constants";
 import {
+  API_BASE,
+  fetchForecastingReport,
   playRegionalSpeech,
   sendAssistantMessage,
   stopRegionalSpeech,
@@ -26,6 +28,29 @@ export default function AssistantChatPanel({
   const [recording, setRecording] = useState(false);
   const [providerLabel, setProviderLabel] = useState("Gemini Free Tier");
   const mediaRecorderRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [sessionWeatherSummary, setSessionWeatherSummary] = useState("");
+  const sentWeatherOnceRef = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+    fetchForecastingReport({
+      location: farmProfile.location,
+      lat: farmProfile.lat,
+      lon: farmProfile.lon,
+      crop: farmProfile.crop,
+      growthStage: farmProfile.growth_stage,
+    })
+      .then((res) => {
+        if (active && res?.ai_summary) {
+          setSessionWeatherSummary(res.ai_summary);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [farmProfile.location, farmProfile.lat, farmProfile.lon, farmProfile.crop, farmProfile.growth_stage]);
 
   const [messages, setMessages] = useState([
     {
@@ -81,9 +106,14 @@ export default function AssistantChatPanel({
     setMessages((prev) => [...prev, { role: "user", text: msgText }]);
     if (!customText) setInput("");
     setLoading(true);
+    let messageToSend = msgText;
+    if (!sentWeatherOnceRef.current && sessionWeatherSummary) {
+      messageToSend = `[Session Weather & 30-Day Climate Context: ${sessionWeatherSummary}]\n\nFarmer Question: ${msgText}`;
+      sentWeatherOnceRef.current = true;
+    }
     try {
       const res = await sendAssistantMessage({
-        message: msgText,
+        message: messageToSend,
         language: chatLang,
         farmer_name: farmProfile.name,
         crop: farmProfile.crop,
@@ -183,6 +213,51 @@ export default function AssistantChatPanel({
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask in Telugu, Hindi, Tamil, Kannada, or English..."
         />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            setMessages((prev) => [...prev, { role: "user", text: `Uploaded leaf image: **${file.name}**` }]);
+            setLoading(true);
+            try {
+              const fd = new FormData();
+              fd.append("image", file);
+              fd.append("language", chatLang);
+              fd.append("crop_mode", (farmProfile.crop || "").toLowerCase().includes("paddy") ? "paddy" : "general");
+              fd.append("crop_name", farmProfile.crop || "Paddy (Rice)");
+              const resp = await fetch(`${API_BASE}/api/predict`, { method: "POST", body: fd });
+              const data = await resp.json();
+              const topList = (data.top_candidates || [])
+                .map((c, i) => `${i + 1}. **${c.disease_name}** (${(c.confidence * 100).toFixed(1)}%)`)
+                .join("\n");
+              setMessages((prev) => [
+                ...prev,
+                {
+                  role: "assistant",
+                  text: `Image analyzed for **${farmProfile.crop}**:\n\n${topList || `**${data.disease_name}** (${Math.round((data.confidence || 0) * 100)}%)`}\n\n${data.speech_summary || ""}`,
+                },
+              ]);
+            } catch {
+              setMessages((prev) => [...prev, { role: "assistant", text: "Could not analyze the uploaded image. Please try again." }]);
+            } finally {
+              setLoading(false);
+              e.target.value = "";
+            }
+          }}
+        />
+        <button
+          type="button"
+          className="mic-icon-btn"
+          onClick={() => fileInputRef.current?.click()}
+          aria-label="Upload leaf image in chat"
+          title="Upload leaf image"
+        >
+          📷
+        </button>
         <button
           type="button"
           className={`mic-icon-btn ${recording ? "recording" : ""}`}
