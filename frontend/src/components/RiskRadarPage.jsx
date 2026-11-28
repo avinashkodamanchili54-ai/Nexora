@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
+  fetchDiseaseReports,
   fetchForecastingReport,
   playRegionalSpeech,
   reportOutbreakSignal,
@@ -25,6 +26,18 @@ export default function RiskRadarPage({
   const [forecastData, setForecastData] = useState(null);
   const [forecastLoading, setForecastLoading] = useState(false);
   const [forecastError, setForecastError] = useState("");
+  const [riskTab, setRiskTab] = useState("baseline");
+  const [confirmedReports, setConfirmedReports] = useState([]);
+
+  const handleLoadConfirmedRisks = async () => {
+    setRiskTab("confirmed");
+    try {
+      const data = await fetchDiseaseReports(10);
+      setConfirmedReports(data.reports || []);
+    } catch {
+      setConfirmedReports([]);
+    }
+  };
 
   const handleLoadForecasting = async () => {
     setForecastLoading(true);
@@ -245,6 +258,45 @@ export default function RiskRadarPage({
             </div>
           ) : null}
         </div>
+
+        <div className="btn-group" style={{ marginTop: "0.75rem", marginBottom: "0.75rem" }}>
+          <button
+            type="button"
+            className={riskTab === "baseline" ? "primary-btn" : "secondary-btn"}
+            onClick={() => setRiskTab("baseline")}
+          >
+            Baseline / Old Weather Risks
+          </button>
+          <button
+            type="button"
+            className={riskTab === "confirmed" ? "primary-btn" : "secondary-btn"}
+            onClick={handleLoadConfirmedRisks}
+          >
+            Confirmed Diagnosis Risks (LLM + DB)
+          </button>
+        </div>
+
+        {riskTab === "confirmed" ? (
+          <div className="speech-summary-card" style={{ marginBottom: "1rem" }}>
+            <strong>Confirmed Field Disease Reports (Saved in Supabase)</strong>
+            {confirmedReports.length === 0 ? (
+              <p className="muted" style={{ marginTop: "0.4rem" }}>
+                No confirmed LLM diagnoses saved yet. Use "Ask LLM to Distinguish" on the Scan Leaf page to confirm and save a diagnosis.
+              </p>
+            ) : (
+              <div className="spray-grid" style={{ marginTop: "0.5rem" }}>
+                {confirmedReports.map((rep) => (
+                  <div key={rep.id} className="spray-card">
+                    <strong>{rep.disease_name}</strong>
+                    <span>Crop: {rep.crop_name}</span>
+                    <span>Farmer: {rep.username}</span>
+                    <span>Confidence: {Math.round((rep.confidence || 0) * 100)}%</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : null}
 
         {weatherAlert ? (
           <>

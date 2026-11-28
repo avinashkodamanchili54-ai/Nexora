@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { runDiagnoseStep } from "../api";
 import { CROP_MODES, CROP_PRESETS, LANGUAGES, UI_STRINGS } from "../constants";
 
 function ScoreGauge({ value, label }) {
@@ -70,6 +71,8 @@ export default function SmartLeafScannerPanel({
   const [imageFiles, setImageFiles] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
   const [dragActive, setDragActive] = useState(false);
+  const [qaState, setQaState] = useState(null);
+  const [qaHistory, setQaHistory] = useState([]);
 
   const strings = UI_STRINGS[language] || UI_STRINGS.en;
 
@@ -260,6 +263,78 @@ export default function SmartLeafScannerPanel({
               <p className="muted">Foliage, sharpness, and daylight exposure look great for diagnosis.</p>
             )}
           </div>
+        </div>
+      ) : null}
+      {scanResult?.top_candidates?.length ? (
+        <div className="quality-card" style={{ marginTop: "1rem", flexDirection: "column", alignItems: "stretch" }}>
+          <div className="section-head" style={{ marginBottom: "0.5rem" }}>
+            <strong>Top {scanResult.top_candidates.length} Crop-Conditional Possibilities</strong>
+            <button
+              type="button"
+              className="secondary-btn"
+              onClick={async () => {
+                const res = await runDiagnoseStep({
+                  username: localStorage.getItem("nexora_user_name") || "Farmer",
+                  crop_name: cropName || "Paddy (Rice)",
+                  top_candidates: scanResult.top_candidates,
+                  qa_history: [],
+                });
+                setQaHistory([]);
+                setQaState(res);
+              }}
+            >
+              Ask LLM to Distinguish
+            </button>
+          </div>
+          <div className="spray-grid">
+            {scanResult.top_candidates.map((c, idx) => (
+              <div key={c.disease_id || idx} className="spray-card">
+                <strong>#{idx + 1} {c.disease_name}</strong>
+                <span>Confidence: {(c.confidence * 100).toFixed(1)}%</span>
+                <span className="muted" style={{ fontSize: "0.82rem" }}>{c.summary}</span>
+              </div>
+            ))}
+          </div>
+
+          {qaState && !qaState.done ? (
+            <div className="speech-summary-card" style={{ marginTop: "0.75rem" }}>
+              <p><strong>LLM Question:</strong> {qaState.question}</p>
+              <div className="btn-group" style={{ marginTop: "0.5rem", flexWrap: "wrap" }}>
+                {(qaState.options || []).map((opt) => (
+                  <button
+                    key={opt}
+                    type="button"
+                    className="secondary-btn"
+                    onClick={async () => {
+                      const nextHist = [...qaHistory, { question: qaState.question, answer: opt }];
+                      setQaHistory(nextHist);
+                      const res = await runDiagnoseStep({
+                        username: localStorage.getItem("nexora_user_name") || "Farmer",
+                        crop_name: cropName || "Paddy (Rice)",
+                        top_candidates: scanResult.top_candidates,
+                        qa_history: nextHist,
+                      });
+                      setQaState(res);
+                    }}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {qaState?.done ? (
+            <div className="speech-summary-card" style={{ marginTop: "0.75rem", borderLeft: "4px solid #15803d" }}>
+              <p><strong>Decisive LLM Diagnosis:</strong> {qaState.decided_disease?.disease_name}</p>
+              <p>{qaState.explanation}</p>
+              {qaState.saved_to_db ? (
+                <span className="sev-badge sev-none" style={{ marginTop: "0.35rem", display: "inline-block" }}>
+                  Saved to Supabase (disease_reports) &amp; Risk Radar Updated
+                </span>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       ) : null}
     </section>

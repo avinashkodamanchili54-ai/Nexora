@@ -116,6 +116,7 @@ class PredictionResponse(BaseModel):
     investigation: RootCauseInvestigation
     speech_summary: str
     model_mode: str
+    top_candidates: List[dict] = Field(default_factory=list)
 
 
 class InvestigationRefineRequest(BaseModel):

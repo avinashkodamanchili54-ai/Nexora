@@ -138,6 +138,20 @@ export async function fetchForecastingReport({ location, lat, lon, crop, growthS
   return parseResponse(res);
 }
 
+export async function runDiagnoseStep(payload) {
+  const res = await fetch(`${API_BASE}/api/predict/diagnose-step`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseResponse(res);
+}
+
+export async function fetchDiseaseReports(limit = 10) {
+  const res = await fetch(`${API_BASE}/api/predict/reports?limit=${limit}`);
+  return parseResponse(res);
+}
+
 export async function reportOutbreakSignal(payload) {
   const res = await fetch(`${API_BASE}/api/weather/outbreaks`, {
     method: "POST",

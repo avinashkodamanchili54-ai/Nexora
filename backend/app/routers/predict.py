@@ -132,6 +132,21 @@ async def predict_crop_disease(
         )
     )
 
+    top_raw = ml_service.predict_disease_top_k(
+        image_bytes, crop_mode=crop_mode, crop_name=crop_name, top_k=3
+    )
+    top_candidates = []
+    for raw_c, conf_c in top_raw:
+        g_c = recommendation_service.get_guidance(raw_c)
+        if g_c:
+            top_candidates.append({
+                "disease_id": g_c.disease_id,
+                "disease_name": g_c.name,
+                "confidence": round(conf_c, 4),
+                "severity": g_c.severity,
+                "summary": g_c.symptoms[0] if g_c.symptoms else g_c.name,
+            })
+
     return PredictionResponse(
         scan_id=scan_id,
         disease_id=localized_guidance.disease_id,
@@ -149,4 +164,130 @@ async def predict_crop_disease(
         investigation=investigation,
         speech_summary=speech_summary,
         model_mode=model_mode,
+        top_candidates=top_candidates,
     )
+
+
+@router.post("/predict/diagnose-step")
+def diagnose_step(payload: dict):
+    """Interactive LLM Q&A to distinguish top-3 crop diseases and save final decision to Supabase."""
+    import psycopg2
+    from app.config import SUPABASE_DB_URL
+
+    username = (payload.get("username") or "Farmer").strip()
+    crop_name = (payload.get("crop_name") or "Paddy (Rice)").strip()
+    candidates = payload.get("top_candidates") or []
+    qa_history = payload.get("qa_history") or []
+
+    if not candidates:
+        raise HTTPException(status_code=400, detail="top_candidates is required.")
+
+    names = [c.get("disease_name", "Unknown") for c in candidates[:3]]
+
+    # Turn 0 or Turn 1: ask a distinguishing question
+    if len(qa_history) == 0:
+        q = (
+            f"Looking at the top possibilities for {crop_name} ({', '.join(names)}): "
+            f"What do the spots look like up close?"
+        )
+        opts = [
+            "Raised orange/rusty powdery pustules on leaf surface",
+            "Long gray-green or brown cigar-shaped/water-soaked lesions",
+            "Small circular spots with yellow halo or dark rings",
+            "Not sure / mixed symptoms",
+        ]
+        return {"done": False, "question": q, "options": opts}
+
+    if len(qa_history) == 1:
+        q = "Where on the plant did these symptoms appear first, and how is the leaf texture?"
+        opts = [
+            "Lower/older leaves first; powdery or dusty when touched",
+            "Upper/younger leaves; wet, sticky, or spreading rapidly",
+            "Evenly scattered across leaf; dry/papery edges",
+            "Not sure",
+        ]
+        return {"done": False, "question": q, "options": opts}
+
+    # Turn >= 2: Decide final disease based on answers + candidates
+    joined_ans = " ".join(str(item.get("answer", "")).lower() for item in qa_history)
+    chosen = candidates[0]
+    for c in candidates:
+        cname = c.get("disease_name", "").lower()
+        if ("rust" in joined_ans or "powdery" in joined_ans or "orange" in joined_ans) and "rust" in cname:
+            chosen = c
+            break
+        if ("cigar" in joined_ans or "water-soaked" in joined_ans or "blight" in joined_ans) and "blight" in cname:
+            chosen = c
+            break
+        if ("spot" in joined_ans or "halo" in joined_ans or "ring" in joined_ans) and ("spot" in cname or "blast" in cname):
+            chosen = c
+            break
+
+    explanation = (
+        f"Based on your visual observations and the {crop_name} model candidates, "
+        f"the decisive diagnosis is **{chosen.get('disease_name')}**."
+    )
+
+    saved = False
+    try:
+        conn = psycopg2.connect(SUPABASE_DB_URL)
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO public.disease_reports
+                (username, crop_name, disease_id, disease_name, confidence, top_candidates, qa_transcript)
+            VALUES (%s, %s, %s, %s, %s, %s::jsonb, %s::jsonb)
+            """,
+            (
+                username,
+                crop_name,
+                chosen.get("disease_id", "unknown"),
+                chosen.get("disease_name", "Unknown"),
+                float(chosen.get("confidence", 0.0)),
+                json.dumps(candidates),
+                json.dumps(qa_history),
+            ),
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+        saved = True
+    except Exception as exc:
+        print(f"[diagnose_step] DB save warning: {exc}")
+
+    return {
+        "done": True,
+        "decided_disease": chosen,
+        "explanation": explanation,
+        "saved_to_db": saved,
+    }
+
+
+@router.get("/predict/reports")
+def list_disease_reports(limit: int = 10):
+    """Return recent confirmed disease reports from Supabase for Risk Radar."""
+    import psycopg2
+    from psycopg2.extras import RealDictCursor
+    from app.config import SUPABASE_DB_URL
+
+    try:
+        conn = psycopg2.connect(SUPABASE_DB_URL)
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute(
+            """
+            SELECT id, username, crop_name, disease_id, disease_name, confidence, created_at
+            FROM public.disease_reports
+            ORDER BY created_at DESC
+            LIMIT %s
+            """,
+            (limit,),
+        )
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        for r in rows:
+            if r.get("created_at"):
+                r["created_at"] = r["created_at"].isoformat()
+        return {"reports": rows}
+    except Exception as exc:
+        return {"reports": [], "error": str(exc)}

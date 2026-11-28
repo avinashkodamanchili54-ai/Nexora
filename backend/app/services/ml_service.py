@@ -173,6 +173,56 @@ class MLService:
         confidence = round(0.85 + (digest[1] % 14) / 100.0, 2)
         return classes[idx], min(1.0, confidence), f"local-heuristic-fallback ({model_key}) [P(Disease | {crop_label})]"
 
+    def predict_disease_top_k(
+        self, image_bytes: bytes, crop_mode: str = "paddy", crop_name: str = "", top_k: int = 3
+    ) -> List[Tuple[str, float]]:
+        """Return top-k (raw_class_name, conditional_confidence) pairs for the selected crop."""
+        img = Image.open(io.BytesIO(image_bytes)).convert("RGB").resize((224, 224))
+        model_key = self._resolve_model_key(crop_mode, crop_name)
+        model = self.models.get(model_key)
+        classes = self.class_mapping.get(model_key) or (
+            self.DEFAULT_PADDY_CLASSES if model_key == "paddy_doctor" else self.DEFAULT_GENERAL_CLASSES
+        )
+        candidate_indices = (
+            self._get_crop_candidate_indices(classes, crop_name)
+            if model_key == "plantvillage"
+            else list(range(len(classes)))
+        )
+
+        if model is not None:
+            import numpy as np  # type: ignore
+
+            if model_key == "paddy_doctor":
+                w, h = img.size
+                cmw, cmh = int(w * 0.075), int(h * 0.075)
+                cc = img.crop((cmw, cmh, w - cmw, h - cmh)).resize((224, 224))
+                views = [
+                    img,
+                    img.transpose(Image.FLIP_LEFT_RIGHT),
+                    cc,
+                    img.rotate(10, resample=Image.BILINEAR),
+                    img.rotate(-10, resample=Image.BILINEAR),
+                ]
+                batch = np.stack([np.asarray(v, dtype="float32") for v in views], axis=0)
+                preds = np.mean(model.predict(batch, verbose=0), axis=0)
+            else:
+                arr = np.expand_dims(np.asarray(img, dtype="float32"), axis=0)
+                preds = model.predict(arr, verbose=0)[0]
+
+            sub_probs = [(i, float(preds[i])) for i in candidate_indices]
+            p_crop = sum(p for _, p in sub_probs)
+            if p_crop > 1e-7:
+                norm_pairs = [(i, p / p_crop) for i, p in sub_probs]
+            else:
+                norm_pairs = sub_probs
+            norm_pairs.sort(key=lambda x: x[1], reverse=True)
+            return [
+                (classes[i] if i < len(classes) else classes[0], float(np.clip(p, 0.0, 1.0)))
+                for i, p in norm_pairs[:top_k]
+            ]
+
+        return [(classes[candidate_indices[0]], 0.85)]
+
     def get_status(self) -> List[dict]:
         """Return availability and evaluation metrics for the active models."""
         eval_path = RESULTS_DIR / "evaluation_summary.json"
