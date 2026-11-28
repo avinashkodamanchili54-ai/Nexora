@@ -79,11 +79,35 @@ export default function ProfilePage({ onNavigate }) {
     if (!navigator.geolocation) return;
     setLocLoading(true);
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const { latitude, longitude } = pos.coords;
+        const locStr = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
         setMapCenter({ lat: latitude, lon: longitude });
-        setFarmLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-        setLocLoading(false);
+        setFarmLocation(locStr);
+        const farm_profile = {
+          ...(form.farm_profile || {}),
+          location: locStr,
+          acreage: parseFloat(acreage) || null,
+          variety,
+          sowing_date: sowingDate,
+          center_lat: latitude,
+          center_lon: longitude,
+        };
+        try {
+          const res = await fetch(`${API_BASE}/api/auth/update-profile`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ ...form, farm_profile }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            updateProfile(data);
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+          }
+        } finally {
+          setLocLoading(false);
+        }
       },
       () => setLocLoading(false),
       { enableHighAccuracy: true }
@@ -224,6 +248,44 @@ export default function ProfilePage({ onNavigate }) {
         <button type="button" className="btn-ghost" onClick={() => onNavigate("dashboard")}>
           ← Back to Dashboard
         </button>
+      </div>
+      <div style={{ marginTop: "1.5rem" }}>
+        <FarmSatellitePage
+          farmProfile={{
+            name: form.name,
+            phone: form.phone,
+            location: farmLocation,
+            lat: mapCenter.lat,
+            lon: mapCenter.lon,
+            crop: form.crop_type,
+            growth_stage: form.farm_profile?.growth_stage || "Vegetative / Tillering",
+            acres: parseFloat(acreage) || form.farm_profile?.acreage || 2.5,
+            soil_type: form.farm_profile?.soil_type || "Alluvial / Clay Loam",
+            irrigation: form.farm_profile?.irrigation || "Canal / Borewell",
+            polygon: form.farm_profile?.polygon || [],
+          }}
+          onSaveFarm={async (updatedFarm) => {
+            const farm_profile = {
+              ...(form.farm_profile || {}),
+              ...updatedFarm,
+              center_lat: updatedFarm.lat ?? mapCenter.lat,
+              center_lon: updatedFarm.lon ?? mapCenter.lon,
+              acreage: updatedFarm.acres ?? (parseFloat(acreage) || null),
+            };
+            const res = await fetch(`${API_BASE}/api/auth/update-profile`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({ ...form, crop_type: updatedFarm.crop || form.crop_type, farm_profile }),
+            });
+            if (res.ok) {
+              const data = await res.json();
+              updateProfile(data);
+              setSaved(true);
+              setTimeout(() => setSaved(false), 3000);
+            }
+          }}
+          selectedLanguage={form.preferred_language}
+        />
       </div>
     </div>
   );
